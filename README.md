@@ -24,4 +24,7 @@
 </h3>
 </div>
 
+![screenshot](https://i.imgur.com/aLim9di.gif)
+
+
 ## 📜 About Project
