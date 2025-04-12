@@ -1,0 +1,28 @@
+{
+  "ConnectionsSettings":{
+    "ID: 0":{
+      "nome":"nova conexão1",
+      "porta":1883,
+      "protocolo":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "ID: 1":{
+      "nome":"nova conexão",
+      "porta":1883,
+      "protocolo":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "ID: 2":{
+      "nome":"nova conexão",
+      "porta":1883,
+      "protocolo":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    }
+  }
+}
