@@ -1,25 +1,20 @@
-.topbox {
+
+/* ------------------------------ TOPBOX STYLE ------------------------------ */
+
+.topbox_box {
   background: #0b5fb3;
   padding: 8px 0;
   border-bottom: 1px;
 }
 
-.app-title {
+.topbox_label {
   color: #f8f8f2;
   font-weight: bold;
   font-size: 1.5em;
   font-family: 'Arial';
 }
 
-.layout {
-  background: white;
-}
-
-.layout_form {
-  background: white;
-}
-
-.searchentry {
+.topbox_searchentry {
   background: #0b5ab3ef;
   color: white;
   border-radius: 6px;
@@ -28,16 +23,34 @@
   /*cursor: text;*/
 }
 
-.searchentry text {
+.topbox_searchentry text {
   color: white;
   font-size: 16px;
 }
 
-.searchentry placeholder {
+/* TODO */
+/* .topbox_searchentry placeholder {
   color: white;
+} */ 
+
+.topbox_button_connect {
+   background: transparent;
+   border: none;
 }
 
-.button_menu {
+.topbox_button_connect:hover {
+  background: #0b5ab3ef;
+  transform: scale(1.30);
+}
+
+.topbox_button_connect_label {
+  color: white;
+  font-size: 1.0em;
+  font-weight: bold;
+  font-family: 'Arial';
+}
+
+.topbox_button_menu {
    background: none;
    border: none;
    box-shadow: none;
@@ -47,98 +60,70 @@
    transition: background-color 0.3s ease;
 }
 
-.button_menu > button {
+.topbox_button_menu > button {
   background: none;
   border: none;
 }
 
-.button_menu > button > box {
+.topbox_button_menu > button > box {
   border: none;
   padding: 0;
 }
 
-.button_menu:hover {
+.topbox_button_menu:hover {
   background: #0b5fb3;
   transform: scale(1.25);
 }
 
-.popover {
+/* TODO */
+/* .popover {
    background: transparent;
    border: none;
+}  */ 
+
+/* ------------------------------ HOMEPAGE STYLE ------------------------------ */
+
+.home_layout {
+  background: white;
 }
 
-.button_connect {
-   background: transparent;
-   border: none;
+/* ------------------------------ FORM STYLE ------------------------------ */
+
+.form_layout {
+  background: white;
 }
 
-.button_connect_label {
-  color: white;
-  font-size: 1.0em;
-  font-weight: bold;
-  font-family: 'Arial';
-}
-                    
-.button_connect:hover {
-  background: #0b5ab3ef;
-  transform: scale(1.30);
-}
-
-.form_ui_image_add {
+.form_image_connections {
   background: none;
   border: none;
   padding: 0;
   margin: 0;
 }
 
-.form_ui_image_add:hover{
+.form_image_connections:hover{
   filter: brightness(95%);
   transform: scale(1.05);
 }
 
-.form_ui_label_connections {
+.form_label_connections {
   color: black;
   font-size: 1.1em;
   font-family: 'Roboto', sans-serif;
 }
 
-.list_item {
-  background-color: #F5F5F5;
-  padding: 8px;
-  margin: 2px 0;
-  transition: backgroud 0.2s;
-}
-
-.list_item:hover {
-  background-color: #F0F0F0;
-  transform: scale(1.01);
-}
-
-.list_item_label1 {
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: #787878;
-  margin-left: 8px;
-}
-
-.list_item_label2 {
-  font-family: 'Roboto', sans-serif;
-  font-size: 12px;
-  color: #D0D0D0;
-}
-.form_ui_label_title {
+.form_label_title {
   font-family: 'Arial';
   font-weight: bold;
   font-size: 1.2em;
 }
 
-.form_ui_label_name {
+.form_label_name {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #787878;
 }
 
-.form_ui_entry_name {
+.form_entry_name {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #0b5fb3;
@@ -146,17 +131,35 @@
     padding: 5px;
 }
 
-.form_ui_entry_name:hover {
+.form_entry_name:hover {
 border-bottom: 3px solid #0b5fb3; 
 }
 
-.form_ui_label_protocolo {
+.form_label_port {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #787878;
 }
 
-.form_ui_dropdown_protocolo {
+.form_entry_port {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  box-shadow: none;
+  padding: 5px;
+}
+
+.form_entry_port:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.form_label_protocol {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.form_dropdown_protocol {
   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
   background-color: transparent;
   border: none;
@@ -169,7 +172,7 @@ border-bottom: 3px solid #0b5fb3;
   font-family: 'Roboto', sans-serif;
 }
 
-.form_ui_dropdown_protocolo button {
+.form_dropdown_protocol button {
   all: unset;
   background: none;
   border: none;
@@ -178,23 +181,23 @@ border-bottom: 3px solid #0b5fb3;
   min-height: 0;
 }
 
-.form_ui_dropdown_protocolo arrow {
+.form_dropdown_protocol arrow {
   min-width: 16px;
   min-height: 16px;
   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
 }
 
-.form_ui_dropdown_protocolo:hover {
+.form_dropdown_protocolo:hover {
   border-bottom: 3px solid #0b5fb3;
 }
 
-.form_ui_label_host {
+.form_label_host {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #787878;
 }
 
-.form_ui_entry_host {
+.form_entry_host {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid #0b5fb3;
@@ -202,17 +205,17 @@ border-bottom: 3px solid #0b5fb3;
   padding: 5px;
 }
 
-.form_ui_entry_host:hover {
+.form_entry_host:hover {
   border-bottom: 3px solid #0b5fb3;
 }
 
-.form_ui_label_port {
+.form_label_username {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #787878;
 }
 
-.form_ui_entry_port {
+.form_entry_username {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid #0b5fb3;
@@ -220,17 +223,17 @@ border-bottom: 3px solid #0b5fb3;
   padding: 5px;
 }
 
-.form_ui_entry_port:hover {
+.form_entry_username:hover {
   border-bottom: 3px solid #0b5fb3;
 }
 
-.form_ui_label_username {
+.form_label_password {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #787878;
 }
 
-.form_ui_entry_username {
+.form_entry_password {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid #0b5fb3;
@@ -238,96 +241,105 @@ border-bottom: 3px solid #0b5fb3;
   padding: 5px;
 }
 
-.form_ui_entry_username:hover {
+.form_entry_password:hover {
   border-bottom: 3px solid #0b5fb3;
 }
 
-.form_ui_label_password {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_ui_entry_password {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  box-shadow: none;
-  padding: 5px;
-}
-
-.form_ui_entry_password:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_ui_button_connect_button {
+.form_button_connect {
   border-radius: 0;
   border: 0.9px solid #00308F;
   background-color: #0b5fb3;
 }
 
-.form_ui_button_connect_button:hover {
+.form_button_connect:hover {
   background-color: #00308F;
   transform: scale(1.02);
 }
 
-.form_ui_button_connect_label {
+.form_button_connect_label {
   color: white;
   font-size: 1.1em;
   font-family: 'Arial';
   font-weight: Bold;
 }
 
-.form_ui_button_save_button {
+.form_button_save {
   border-radius: 0;
   border: 0.9px solid #D0D0D0;
   background-color: #F8F8F8;
 }
 
-.form_ui_button_save_button:hover {
+.form_button_save:hover {
   background-color: #F0F0F0;
   transform: scale(1.02);
 }
 
-.form_ui_button_save_label {
+.form_button_save_label {
   color: #0b5fb3;
   font-size: 1.1em;
   font-family: 'Arial';
   font-weight: Bold;
 }
 
-.form_ui_button_delete_button {
+.form_button_delete {
   border-radius: 0;
   border: 0.9px solid #B00000;
   background-color: #C11500;
 }
 
-.form_ui_button_delete_button:hover {
+.form_button_delete:hover {
   background-color: #B00000;
   transform: scale(1.02);
 }
 
-.form_ui_button_delete_label {
+.form_button_delete_label {
   color: white;
   font-size: 1.1em;
   font-family: 'Arial';
   font-weight: Bold;
 }
 
-.form_ui_button_advance_button {
+.form_button_advance {
   border-radius: 0;
   border: 0.9px solid #D0D0D0;
   background-color: #F8F8F8;
 }
 
-.form_ui_button_advance_button:hover {
+.form_button_options:hover {
   background-color: #F0F0F0;
   transform: scale(1.02);
 }
 
-.form_ui_button_advance_label {
+.form_button_options_label {
   color: #0b5fb3;
   font-size: 1.1em;
   font-family: 'Arial';
   font-weight: Bold;
 }
+
+.form_listitem {
+  background-color: #F5F5F5;
+  padding: 8px;
+  margin: 2px 0;
+  transition: backgroud 0.2s;
+}
+
+.form_listitem:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.01);
+}
+
+.form_listitem_name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #787878;
+  margin-left: 8px;
+}
+
+.form_listitem_host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  color: #D0D0D0;
+}
+
+

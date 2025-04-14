@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=HAPA IoT
+Icon=icons/apps/64/hapa-app-icon.png
+Exec=programa
+Terminal=false
+Categories=Development;
+
+

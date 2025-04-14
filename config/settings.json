@@ -1,25 +1,25 @@
 {
   "ConnectionsSettings":{
     "ID: 0":{
-      "nome":"nova conexão1",
-      "porta":1883,
-      "protocolo":"mqtt",
-      "host":"",
+      "name":"ESP32",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"192.168.1.159",
       "username":"",
       "password":""
     },
     "ID: 1":{
-      "nome":"nova conexão",
-      "porta":1883,
-      "protocolo":"mqtt",
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
       "host":"",
       "username":"",
       "password":""
     },
     "ID: 2":{
-      "nome":"nova conexão",
-      "porta":1883,
-      "protocolo":"mqtt",
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
       "host":"",
       "username":"",
       "password":""
