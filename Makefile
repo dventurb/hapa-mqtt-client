@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall -g $(shell pkg-config --cflags gtk4) -I/usr/include/json-c -Iinc 
 
-LDFLAGS = $(shell pkg-config --libs gtk4) -ljson-c 
+LDFLAGS = $(shell pkg-config --libs gtk4) -ljson-c -luuid 
 
 SRC = $(wildcard src/*.c) 
 

@@ -159,8 +159,8 @@ void initFormUI(ST_FormUI *form_ui){
 
   // SIGNALS (BUTTONS)
   g_signal_connect(form_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), form_ui);
+  g_signal_connect(form_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), form_ui);
 }
-
 
 void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){
   ST_FormUI *form_ui = (ST_FormUI *)user_data;
@@ -241,7 +241,7 @@ void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y
   ST_FormUI *form_ui = (ST_FormUI *)user_data;
   STMQTTConnection *connection = stMQTTConnectionNew();
   int position = g_list_model_get_n_items(G_LIST_MODEL(form_ui->connection_store)) - 1;
-  stMQTTConnectionSetID(connection, (position + 1));
+  stMQTTConnectionSetID(connection, getID());
   addConnectionToJSON(connection);
   g_list_store_append(form_ui->connection_store, connection);
   gtk_single_selection_set_selected(form_ui->selection_model, position);
@@ -334,5 +334,14 @@ void saveConnection(GtkButton *button, gpointer user_data){
   ST_FormUI *form_ui = (ST_FormUI *)user_data;
   int position = gtk_single_selection_get_selected(form_ui->selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-  updateConnectionInJSON(connection, position);
+  updateConnectionInJSON(connection);
+}
+
+void deleteConnection(GtkButton *button, gpointer user_data){
+  ST_FormUI *form_ui = (ST_FormUI *)user_data;
+  int position = gtk_single_selection_get_selected(form_ui->selection_model);
+  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
+  g_list_store_remove(form_ui->connection_store, position);
+  deleteConnectionInJSON(connection);
+  stMQTTConnectionFree(connection);
 }

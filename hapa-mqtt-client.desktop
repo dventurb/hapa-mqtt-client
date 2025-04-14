@@ -2,7 +2,7 @@
 Type=Application
 Name=HAPA IoT
 Icon=icons/apps/64/hapa-app-icon.png
-Exec=programa
+Exec=/home/user/hapa/programa
 Terminal=false
 Categories=Development;
 

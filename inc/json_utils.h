@@ -11,7 +11,8 @@
 typedef struct _ST_FormUI ST_FormUI;
 
 void addConnectionToJSON(STMQTTConnection *connection);
-void updateConnectionInJSON(STMQTTConnection *connection, int position);
+void updateConnectionInJSON(STMQTTConnection *connection);
 void loadJSONToForm(ST_FormUI *form_ui);
+void deleteConnectionInJSON(STMQTTConnection *connection);
 
 #endif

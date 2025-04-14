@@ -6,6 +6,7 @@
 #include "json_utils.h"
 #include "widgets.h"
 #include "paths.h"
+#include "aux.h"
 
 typedef struct _ST_FormUI {
   GtkWidget *fixed;
@@ -43,5 +44,6 @@ void entryHostChanged(GtkEntry *entry_host, gpointer user_data);
 void entryUsernameChanged(GtkEntry *entry_username, gpointer user_data);
 void entryPasswordChanged(GtkEntry *entry_password, gpointer user_data);
 void saveConnection(GtkButton *button, gpointer user_data);
+void deleteConnection(GtkButton *button, gpointer user_data);
 
 #endif

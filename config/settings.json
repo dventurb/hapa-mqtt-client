@@ -1,22 +1,6 @@
 {
   "ConnectionsSettings":{
-    "ID: 0":{
-      "name":"ESP32",
-      "port":1883,
-      "protocol":"mqtt",
-      "host":"192.168.1.159",
-      "username":"",
-      "password":""
-    },
-    "ID: 1":{
-      "name":"nova conexão",
-      "port":1883,
-      "protocol":"mqtt",
-      "host":"",
-      "username":"",
-      "password":""
-    },
-    "ID: 2":{
+    "6d242fd0-2196-4dab-8722-0ab5cb5264d0":{
       "name":"nova conexão",
       "port":1883,
       "protocol":"mqtt",

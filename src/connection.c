@@ -2,7 +2,7 @@
 
 struct _STMQTTConnection {
   GObject parent_instance; 
-  int id;
+  char *id;
   int port;
   char *name;
   char *protocol;
@@ -25,6 +25,8 @@ static void st_mqtt_connection_init(STMQTTConnection *connection){
 
 static void st_mqtt_connection_finalize(GObject *object){
   STMQTTConnection *connection = ST_MQTT_Connection(object);
+  free(connection->id);
+  connection->id = NULL;
   free(connection->name);
   connection->name = NULL;
   free(connection->protocol);
@@ -47,6 +49,10 @@ STMQTTConnection *st_mqtt_connection_new(void){
   return g_object_new(ST_TYPE_MQTT_CONNECTION, NULL);
 }
 
+void st_mqtt_connection_free(STMQTTConnection *self){
+  g_object_unref(self);
+}
+
 const char *st_mqtt_connection_get_name(STMQTTConnection *self){
   if(self->name){
     return self->name;
@@ -55,8 +61,12 @@ const char *st_mqtt_connection_get_name(STMQTTConnection *self){
   }
 }
 
-int st_mqtt_connection_get_id(STMQTTConnection *self){
+const char *st_mqtt_connection_get_id(STMQTTConnection *self){
+  if(self->id){ 
     return self->id;
+  }else {
+    return "";
+  }
 }
 
 int st_mqtt_connection_get_port(STMQTTConnection *self){ 
@@ -102,8 +112,11 @@ void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name){
   self->name = strdup(name);
 }
 
-void st_mqtt_connection_set_id(STMQTTConnection *self, int id){
- self->id = id;
+void st_mqtt_connection_set_id(STMQTTConnection *self, const char *id){
+ if(self->id){
+   free(self->id);
+ }
+  self->id = strdup(id);
 }
 
 void st_mqtt_connection_set_port(STMQTTConnection *self, int port){
