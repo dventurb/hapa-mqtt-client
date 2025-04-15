@@ -55,8 +55,12 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_widget_set_hexpand(form_ui->scrolled, TRUE);
   gtk_widget_set_vexpand(form_ui->scrolled, TRUE);
 
-  //form_ui->stack = gtk_stack_new();
-  //gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
+  // STACK - Two stack pages for connection simple data (CONNECTION SECTION) 
+  // and other for connections topics and QOS (TOPICS SECTION).
+  // Maybe will divide the ST_FormUI into two structs for each section.
+  form_ui->stack = gtk_stack_new();
+  gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
+  gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->stack);
 
   /* -------------------------- CONNECTION SECTION (START) -------------------------- */
  
@@ -174,6 +178,12 @@ void initFormUI(ST_FormUI *form_ui){
   g_signal_connect(form_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), form_ui);
 
   /* -------------------------- CONNECTION SECTION (END) -------------------------- */
+
+
+  /* -------------------------- TOPICS SECTION (START) -------------------------- */
+ 
+  // TOPICS SECTION - Entry and labels for the MQTT topics.
+  
 }
 
 void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){

@@ -8,6 +8,7 @@
 #include "widgets.h"
 #include "paths.h"
 #include "aux.h"
+#include "ui_topics.h"
 
 typedef struct _ST_FormUI {
   GtkWidget *main_box;
@@ -15,7 +16,6 @@ typedef struct _ST_FormUI {
   GtkWidget *stack;
   GtkWidget *label;
   GtkWidget *image;
-  GtkWidget *box_form;
   GtkWidget *box_connections;
   GtkWidget *entry_name;
   GtkWidget *entry_host;
@@ -34,6 +34,7 @@ typedef struct _ST_FormUI {
   ST_BUTTON button_delete;
   ST_BUTTON button_connect;
   ST_BUTTON button_options;
+  ST_TopicsUI *topics_ui;
 }ST_FormUI;
 
 void initFormUI(ST_FormUI *form_ui);
