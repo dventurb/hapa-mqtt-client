@@ -3,15 +3,19 @@
 
 #include <gtk/gtk.h>
 #include "connection.h"
+#include "topic.h"
 #include "json_utils.h"
 #include "widgets.h"
 #include "paths.h"
 #include "aux.h"
 
 typedef struct _ST_FormUI {
+  GtkWidget *main_box;
   GtkWidget *fixed;
+  GtkWidget *stack;
   GtkWidget *label;
   GtkWidget *image;
+  GtkWidget *box_form;
   GtkWidget *box_connections;
   GtkWidget *entry_name;
   GtkWidget *entry_host;

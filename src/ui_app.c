@@ -43,11 +43,11 @@ void initAppWidgets(ST_AppWidgets *app_ui, GtkApplication *app){
 
   // HOMEPAGE
   initHomeUI(&app_ui->home_ui);
-  gtk_stack_add_named(GTK_STACK(app_ui->stack), app_ui->home_ui.fixed, "homepage");
+  gtk_stack_add_named(GTK_STACK(app_ui->stack), app_ui->home_ui.paned, "homepage");
 
   // FORM PAGE 
   initFormUI(&app_ui->form_ui);
-  gtk_stack_add_named(GTK_STACK(app_ui->stack), app_ui->form_ui.fixed, "formpage");
+  gtk_stack_add_named(GTK_STACK(app_ui->stack), app_ui->form_ui.main_box, "formpage");
   
   // Set the homepage as the currently visible stack page.  
   gtk_stack_set_visible_child_name(GTK_STACK(app_ui->stack), "homepage");

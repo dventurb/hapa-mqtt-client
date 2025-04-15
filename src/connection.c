@@ -9,18 +9,28 @@ struct _STMQTTConnection {
   char *host;
   char *username;
   char *password;
+  GListStore *topics;
 };
 
 G_DEFINE_TYPE(STMQTTConnection, st_mqtt_connection, G_TYPE_OBJECT);
 
 static void st_mqtt_connection_init(STMQTTConnection *connection){
-  connection->id = 0;
+  connection->id = NULL;
   connection->port = 1883;
   connection->name = strdup("nova conexão");
   connection->protocol = strdup("mqtt");
   connection->host = NULL;
   connection->username = NULL;
   connection->password = NULL;
+  connection->topics = g_list_store_new(ST_TYPE_MQTT_TOPIC);
+}
+
+static void st_mqtt_connection_dispose(GObject *object){
+  STMQTTConnection *self = ST_MQTT_Connection(object);
+  if(self->topics){
+    g_clear_object(&self->topics);
+  }
+  G_OBJECT_CLASS(st_mqtt_connection_parent_class)->dispose(object);
 }
 
 static void st_mqtt_connection_finalize(GObject *object){
@@ -42,6 +52,7 @@ static void st_mqtt_connection_finalize(GObject *object){
 
 static void st_mqtt_connection_class_init(STMQTTConnectionClass *klass){
   GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+  gobject_class->dispose = st_mqtt_connection_dispose;
   gobject_class->finalize = st_mqtt_connection_finalize;
 }
 

@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-  GtkWidget *fixed;
+  GtkWidget *paned;
 }ST_HomeUI;
 
 void initHomeUI(ST_HomeUI *home_ui);

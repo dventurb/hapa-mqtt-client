@@ -7,6 +7,14 @@
       "host":"",
       "username":"",
       "password":""
+    },
+    "49dde78c-e55d-42ec-897b-2c81a1881079":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
     }
   }
 }

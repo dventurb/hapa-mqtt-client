@@ -7,8 +7,10 @@
 #define CONNECTION_H
 
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "topic.h"
 
 G_BEGIN_DECLS
 
