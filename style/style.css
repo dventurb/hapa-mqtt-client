@@ -342,4 +342,125 @@ border-bottom: 3px solid #0b5fb3;
   color: #D0D0D0;
 }
 
+/* ------------------------------ TOPICS STYLE ------------------------------ */
 
+.topics_label_title {
+  font-family: 'Arial';
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.topics_label_topic {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.topics_entry_topic {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #0b5fb3;
+    box-shadow: none;
+    padding: 5px;
+}
+
+.topics_entry_topic:hover {
+border-bottom: 3px solid #0b5fb3; 
+}
+
+.topics_label_qos {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.topics_dropdown_qos {
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.topics_dropdown_qos button {
+  all: unset;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  min-height: 0;
+}
+
+.topics_dropdown_qos arrow {
+  min-width: 16px;
+  min-height: 16px;
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+}
+
+.topics_dropdown_qos:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.topics_button_add {
+  border-radius: 0;
+  border: 0.9px solid #00308F;
+  background-color: #0b5fb3;
+}
+
+.topics_button_add:hover {
+  background-color: #00308F;
+  transform: scale(1.02);
+}
+
+.topics_button_add_label {
+  color: white;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.topics_listitem {
+  padding: 6px 12px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1px;
+  border-bottom: 2px;
+  transition: background-color 200ms ease;
+}
+
+.topics_listitem:hover {
+  background-color: #ffffff;
+}
+
+.topics_listitem_image {
+  margin-right: 10px;
+  transition: opacity 150ms ease;
+  opacity: 0.9;
+}
+
+.topics_listitem_image:hover {
+  opacity: 1.0;
+  transform: scale(1.1);
+}
+
+.topics_listitem_topic {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  padding: 0 5px;
+}
+
+.topics_listitem_qos {
+  font-size: 12px;
+  font-weight: 400;
+  color: #666666;
+  background-color: #eef1f4;
+  padding: 4px 10px;
+  border-radius: 8px;
+}

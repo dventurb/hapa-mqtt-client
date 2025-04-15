@@ -3,22 +3,22 @@
 struct _STMQTTTopic {
   GObject parent_instance;
   char *name;
-  char *path;
+  char *qos;
 };
 
 G_DEFINE_TYPE(STMQTTTopic, st_mqtt_topic, G_TYPE_OBJECT);
 
 static void st_mqtt_topic_init(STMQTTTopic *topic){
   topic->name = NULL;
-  topic->path = NULL;
+  topic->qos = NULL;
 }
 
 static void st_mqtt_topic_finalize(GObject *object){
   STMQTTTopic *topic = ST_MQTT_Topic(object);
   free(topic->name);
   topic->name = NULL;
-  free(topic->path);
-  topic->path = NULL;
+  free(topic->qos);
+  topic->qos = NULL;
   G_OBJECT_CLASS(st_mqtt_topic_parent_class)->finalize(object);
 }
 
@@ -43,9 +43,9 @@ const char *st_mqtt_topic_get_name(STMQTTTopic *self){
   }
 }
 
-const char *st_mqtt_topic_get_path(STMQTTTopic *self){
-  if(self->path){
-    return self->path;
+const char *st_mqtt_topic_get_qos(STMQTTTopic *self){
+  if(self->qos){
+    return self->qos;
   }else {
     return "";
   }
@@ -58,10 +58,10 @@ void st_mqtt_topic_set_name(STMQTTTopic *self, const char *name){
   self->name = strdup(name);
 }
 
-void st_mqtt_topic_set_path(STMQTTTopic *self, const char *path){
-  if(self->path){
-    free(self->path);
+void st_mqtt_topic_set_qos(STMQTTTopic *self, const char *qos){
+  if(self->qos){
+    free(self->qos);
   }
-  self->path = strdup(path);
+  self->qos = strdup(qos);
 }
 

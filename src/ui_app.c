@@ -23,7 +23,7 @@ void initAppWidgets(ST_AppWidgets *app_ui, GtkApplication *app){
   // WINDOW
   app_ui->window = gtk_application_window_new(app);
   gtk_window_set_title(GTK_WINDOW(app_ui->window), "HAPA IoT");
-  gtk_window_set_default_size(GTK_WINDOW(app_ui->window), 1000, 600);
+  gtk_window_set_default_size(GTK_WINDOW(app_ui->window), 1000, 500);
   gtk_window_set_icon_name(GTK_WINDOW(app_ui->window), "hapa-app-icon.png");
   gtk_window_set_deletable(GTK_WINDOW(app_ui->window), TRUE);
   gtk_window_set_resizable(GTK_WINDOW(app_ui->window), FALSE);

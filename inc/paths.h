@@ -18,6 +18,7 @@
 #define CONNECTION_OPTIONS_PATH "icons/actions/connection-options.png"
 
 #define TOPIC_ADD_PATH "icons/actions/topic-add.png"
+#define TOPIC_DELETE_PATH "icons/actions/topic-delete.png"
 
 #endif 
 

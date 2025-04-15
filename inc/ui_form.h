@@ -34,7 +34,7 @@ typedef struct _ST_FormUI {
   ST_BUTTON button_delete;
   ST_BUTTON button_connect;
   ST_BUTTON button_options;
-  ST_TopicsUI *topics_ui;
+  ST_TopicsUI topics_ui;
 }ST_FormUI;
 
 void initFormUI(ST_FormUI *form_ui);
@@ -50,5 +50,6 @@ void entryUsernameChanged(GtkEntry *entry_username, gpointer user_data);
 void entryPasswordChanged(GtkEntry *entry_password, gpointer user_data);
 void saveConnection(GtkButton *button, gpointer user_data);
 void deleteConnection(GtkButton *button, gpointer user_data);
+void switchToTopics(GtkButton *button, gpointer user_data);
 
 #endif

@@ -4,14 +4,18 @@
 void initFormUI(ST_FormUI *form_ui){
 
   form_ui->main_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-  gtk_widget_set_vexpand(form_ui->main_box, TRUE);
-  gtk_widget_set_hexpand(form_ui->main_box, TRUE);
+  gtk_widget_set_size_request(form_ui->main_box, 1000, 500);
+  gtk_widget_set_vexpand(form_ui->main_box, FALSE);
+  gtk_widget_set_hexpand(form_ui->main_box, FALSE);
+  gtk_box_set_homogeneous(GTK_BOX(form_ui->main_box), FALSE);
   gtk_widget_add_css_class(form_ui->main_box, "form_layout");
   
   // BOX CONNECTIONS (LEFT SIDE)
   form_ui->box_connections = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   gtk_widget_set_size_request(form_ui->box_connections, 200, 500);
   gtk_widget_set_margin_start(form_ui->box_connections, 10);
+  gtk_widget_set_vexpand(form_ui->box_connections, FALSE);
+  gtk_widget_set_hexpand(form_ui->box_connections, FALSE);
   gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->box_connections);
 
   // LIST STORE - This is where the MQTT connections will be stored.
@@ -36,7 +40,7 @@ void initFormUI(ST_FormUI *form_ui){
 
   // SELECTION MODEL - Allows selecting a single connection from the list store.
   form_ui->selection_model = gtk_single_selection_new(G_LIST_MODEL(form_ui->connection_store));
-  loadJSONToForm(form_ui);
+  //loadJSONToForm(form_ui);
   g_signal_connect(form_ui->selection_model, "selection-changed", G_CALLBACK(selectionChanged), form_ui);
 
   // FACTORY - Provides a visual representation of each connection in the list view.
@@ -58,9 +62,7 @@ void initFormUI(ST_FormUI *form_ui){
   // STACK - Two stack pages for connection simple data (CONNECTION SECTION) 
   // and other for connections topics and QOS (TOPICS SECTION).
   // Maybe will divide the ST_FormUI into two structs for each section.
-  form_ui->stack = gtk_stack_new();
-  gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
-  gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->stack);
+
 
   /* -------------------------- CONNECTION SECTION (START) -------------------------- */
  
@@ -71,7 +73,6 @@ void initFormUI(ST_FormUI *form_ui){
   // CONNECTION SECTION - Entry and labels for the MQTT connection.
   
   form_ui->fixed = gtk_fixed_new();
-  gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->fixed);
 
   // TEXT 
   form_ui->label = gtk_label_new("Conexão MQTT");
@@ -176,14 +177,25 @@ void initFormUI(ST_FormUI *form_ui){
   // SIGNALS (BUTTONS)
   g_signal_connect(form_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), form_ui);
   g_signal_connect(form_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), form_ui);
+  g_signal_connect(form_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), form_ui);
+ 
 
   /* -------------------------- CONNECTION SECTION (END) -------------------------- */
 
+  form_ui->stack = gtk_stack_new();
+  gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
 
+ gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->fixed, "connections");
+ gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->stack);
+ 
   /* -------------------------- TOPICS SECTION (START) -------------------------- */
  
   // TOPICS SECTION - Entry and labels for the MQTT topics.
   
+  initTopicsUI(&form_ui->topics_ui);
+  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->topics_ui.fixed, "topics");
+  
+  gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "connections");
 }
 
 void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){
@@ -228,10 +240,9 @@ void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_
 
   GtkWidget *label = gtk_label_new(NULL);
   gtk_widget_add_css_class(label, "form_listitem_name");
-  //gtk_list_item_set_child(item, box);
   g_object_set_data(G_OBJECT(item), "name", label);
   gtk_label_set_max_width_chars(GTK_LABEL(label), 1);
-  gtk_label_set_ellipsize(GTK_LABEL(label), 3); // Limit label
+  gtk_label_set_ellipsize(GTK_LABEL(label), 3); // Limit chars
   gtk_box_append(GTK_BOX(box), label);
 
   label = gtk_label_new(NULL);
@@ -304,7 +315,6 @@ void dropdownProtocolChanged(GObject *object, GParamSpec *pspec, gpointer user_d
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
 
   int item = gtk_drop_down_get_selected(GTK_DROP_DOWN(form_ui->dropdown_protocol));
-
   if(item == 0){
     stMQTTConnectionSetProtocol(connection, "mqtt");
   }else if (item == 1){
@@ -369,3 +379,10 @@ void deleteConnection(GtkButton *button, gpointer user_data){
   deleteConnectionInJSON(connection);
   stMQTTConnectionFree(connection);
 }
+
+void switchToTopics(GtkButton *button, gpointer user_data){
+  ST_FormUI *form_ui = (ST_FormUI *)user_data;
+
+  gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "topics");
+}
+
