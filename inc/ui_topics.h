@@ -11,6 +11,8 @@ typedef struct {
   GtkWidget *label;
   GtkWidget *entry_topic;
   GtkWidget *dropdown_qos;
+  GtkWidget *box_topics;
+  GtkWidget *box_top;
   GtkWidget *list_view;
   GtkWidget *scrolled;
   GtkListItemFactory *factory;
@@ -26,5 +28,6 @@ void initTopicsUI(ST_TopicsUI *topics_ui);
 void addTopic(GtkButton *button, gpointer user_data);
 void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void bindFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data);
 
 #endif

@@ -36,6 +36,7 @@ void initTopicsUI(ST_TopicsUI *topics_ui){
   gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 110);
   g_signal_connect(topics_ui->button_add.button, "clicked", G_CALLBACK(addTopic), topics_ui);
 
+  // LIST STORE (TOPICS)
   topics_ui->topics_store = g_list_store_new(ST_TYPE_MQTT_TOPIC);
 
   // FACTORY
@@ -51,10 +52,27 @@ void initTopicsUI(ST_TopicsUI *topics_ui){
   // SCROLLED 
   topics_ui->scrolled = gtk_scrolled_window_new();
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(topics_ui->scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(topics_ui->scrolled), topics_ui->list_view);
-  gtk_widget_set_size_request(topics_ui->scrolled, 550, 200);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->scrolled, 30, 160);
+  topics_ui->box_topics = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
+  // BOX TOPICS - One box on top with labels and the List View with items.
+  topics_ui->box_top = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_widget_set_size_request(topics_ui->box_top, 660, 45);
+  topics_ui->label = gtk_label_new("Tópico");
+  gtk_widget_set_margin_start(topics_ui->label, 40);
+  gtk_widget_set_hexpand(topics_ui->label, TRUE);
+  gtk_widget_add_css_class(topics_ui->label, "topics_list_title");
+  gtk_box_append(GTK_BOX(topics_ui->box_top), topics_ui->label);
+  topics_ui->label = gtk_label_new("QoS");
+  gtk_widget_set_margin_end(topics_ui->label, 15);
+  gtk_widget_add_css_class(topics_ui->label, "topics_list_qos");
+  gtk_box_append(GTK_BOX(topics_ui->box_top), topics_ui->label);
+  gtk_widget_add_css_class(topics_ui->box_top, "topics_list_boxtop");
+  gtk_box_append(GTK_BOX(topics_ui->box_topics), topics_ui->box_top);
+  gtk_widget_add_css_class(topics_ui->box_topics, "topics_list_box");
+  gtk_box_append(GTK_BOX(topics_ui->box_topics), topics_ui->list_view);
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(topics_ui->scrolled), topics_ui->box_topics);
+  gtk_widget_set_size_request(topics_ui->scrolled, 660, 240);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->scrolled, 30, 150); 
 }
 
 void addTopic(GtkButton *button, gpointer user_data){
@@ -77,7 +95,7 @@ void addTopic(GtkButton *button, gpointer user_data){
 } 
 
 void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
- // ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
 
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_add_css_class(box, "topics_listitem");
@@ -89,9 +107,11 @@ void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user
   gtk_widget_set_margin_bottom(image, 5);
   gtk_widget_add_css_class(image, "topics_listitem_image");
   gtk_box_append(GTK_BOX(box), image);
+  g_object_set_data(G_OBJECT(image), "list_item", item);
   GtkGesture *gesture = gtk_gesture_click_new();
   gtk_widget_add_controller(image, GTK_EVENT_CONTROLLER(gesture));
- // g_signal_connect(gesture, "pressed", G_CALLBACK(deleteTopic), topics_ui);
+  g_signal_connect(gesture, "pressed", G_CALLBACK(deleteTopic), topics_ui);
+
 
   GtkWidget *label = gtk_label_new(NULL);
   gtk_widget_add_css_class(label, "topics_listitem_topic");
@@ -119,4 +139,14 @@ void bindFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_
 
   label = g_object_get_data(G_OBJECT(item), "qos");
   gtk_label_set_text(GTK_LABEL(label), stMQTTTopicGetQoS(topic));
+}
+
+void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data){
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+
+  GtkWidget *image = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(gesture));
+  GtkListItem *item = g_object_get_data(G_OBJECT(image), "list_item");
+  int position = gtk_list_item_get_position(GTK_LIST_ITEM(item));
+
+  g_list_store_remove(topics_ui->topics_store, position);
 }
