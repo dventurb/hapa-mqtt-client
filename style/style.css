@@ -81,11 +81,13 @@
    border: none;
 }  */ 
 
+
 /* ------------------------------ HOMEPAGE STYLE ------------------------------ */
 
 .home_layout {
   background: white;
 }
+
 
 /* ------------------------------ FORM STYLE ------------------------------ */
 
@@ -110,213 +112,6 @@
   font-size: 1.1em;
   font-family: 'Roboto', sans-serif;
 }
-
-.form_label_title {
-  font-family: 'Arial';
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-.form_label_name {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_entry_name {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid #0b5fb3;
-    box-shadow: none;
-    padding: 5px;
-}
-
-.form_entry_name:hover {
-border-bottom: 3px solid #0b5fb3; 
-}
-
-.form_label_port {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_entry_port {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  box-shadow: none;
-  padding: 5px;
-}
-
-.form_entry_port:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_label_protocol {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_dropdown_protocol {
-  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  border-radius: 0;
-  box-shadow: none;
-  outline: none;
-  padding: 5px;
-  font-size: 14px;
-  font-family: 'Roboto', sans-serif;
-}
-
-.form_dropdown_protocol button {
-  all: unset;
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  min-height: 0;
-}
-
-.form_dropdown_protocol arrow {
-  min-width: 16px;
-  min-height: 16px;
-  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
-}
-
-.form_dropdown_protocolo:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_label_host {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_entry_host {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  box-shadow: none;
-  padding: 5px;
-}
-
-.form_entry_host:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_label_username {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_entry_username {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  box-shadow: none;
-  padding: 5px;
-}
-
-.form_entry_username:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_label_password {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #787878;
-}
-
-.form_entry_password {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #0b5fb3;
-  box-shadow: none;
-  padding: 5px;
-}
-
-.form_entry_password:hover {
-  border-bottom: 3px solid #0b5fb3;
-}
-
-.form_button_connect {
-  border-radius: 0;
-  border: 0.9px solid #00308F;
-  background-color: #0b5fb3;
-}
-
-.form_button_connect:hover {
-  background-color: #00308F;
-  transform: scale(1.02);
-}
-
-.form_button_connect_label {
-  color: white;
-  font-size: 1.1em;
-  font-family: 'Arial';
-  font-weight: Bold;
-}
-
-.form_button_save {
-  border-radius: 0;
-  border: 0.9px solid #D0D0D0;
-  background-color: #F8F8F8;
-}
-
-.form_button_save:hover {
-  background-color: #F0F0F0;
-  transform: scale(1.02);
-}
-
-.form_button_save_label {
-  color: #0b5fb3;
-  font-size: 1.1em;
-  font-family: 'Arial';
-  font-weight: Bold;
-}
-
-.form_button_delete {
-  border-radius: 0;
-  border: 0.9px solid #B00000;
-  background-color: #C11500;
-}
-
-.form_button_delete:hover {
-  background-color: #B00000;
-  transform: scale(1.02);
-}
-
-.form_button_delete_label {
-  color: white;
-  font-size: 1.1em;
-  font-family: 'Arial';
-  font-weight: Bold;
-}
-
-.form_button_options {
-  border-radius: 0;
-  border: 0.9px solid #D0D0D0;
-  background-color: #F8F8F8;
-}
-
-.form_button_options:hover {
-  background-color: #F0F0F0;
-  transform: scale(1.02);
-}
-
-.form_button_options_label {
-  color: #0b5fb3;
-  font-size: 1.1em;
-  font-family: 'Arial';
-  font-weight: Bold;
-}
-
 .form_listitem {
   background-color: #F5F5F5;
   padding: 8px;
@@ -342,7 +137,217 @@ border-bottom: 3px solid #0b5fb3;
   color: #D0D0D0;
 }
 
-/* ------------------------------ TOPICS STYLE ------------------------------ */
+
+/* ------------------------------ CONNECTIONS SECTION STYLE ------------------------------ */
+
+.connections_label_title {
+  font-family: 'Arial';
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.connections_label_name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_entry_name {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #0b5fb3;
+    box-shadow: none;
+    padding: 5px;
+}
+
+.connections_entry_name:hover {
+border-bottom: 3px solid #0b5fb3; 
+}
+
+.connections_label_port {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_entry_port {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  box-shadow: none;
+  padding: 5px;
+}
+
+.connections_entry_port:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.connections_label_protocol {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_dropdown_protocol {
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.connections_dropdown_protocol button {
+  all: unset;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  min-height: 0;
+}
+
+.connections_dropdown_protocol arrow {
+  min-width: 16px;
+  min-height: 16px;
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+}
+
+.connections_dropdown_protocolo:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.connections_label_host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_entry_host {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  box-shadow: none;
+  padding: 5px;
+}
+
+.connections_entry_host:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.connections_label_username {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_entry_username {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  box-shadow: none;
+  padding: 5px;
+}
+
+.connections_entry_username:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.connections_label_password {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #787878;
+}
+
+.connections_entry_password {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #0b5fb3;
+  box-shadow: none;
+  padding: 5px;
+}
+
+.connections_entry_password:hover {
+  border-bottom: 3px solid #0b5fb3;
+}
+
+.connections_button_connect {
+  border-radius: 0;
+  border: 0.9px solid #00308F;
+  background-color: #0b5fb3;
+}
+
+.connections_button_connect:hover {
+  background-color: #00308F;
+  transform: scale(1.02);
+}
+
+.connections_button_connect_label {
+  color: white;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.connections_button_save {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.connections_button_save:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.connections_button_save_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.connections_button_delete {
+  border-radius: 0;
+  border: 0.9px solid #B00000;
+  background-color: #C11500;
+}
+
+.connections_button_delete:hover {
+  background-color: #B00000;
+  transform: scale(1.02);
+}
+
+.connections_button_delete_label {
+  color: white;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.connections_button_options {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.connections_button_options:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.connections_button_options_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+
+/* ------------------------------ TOPICS SECTION STYLE ------------------------------ */
 
 .topics_label_title {
   font-family: 'Arial';

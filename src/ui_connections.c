@@ -9,70 +9,69 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   connections_ui->selection_model = gtk_single_selection_new(G_LIST_MODEL(connections_ui->connection_store));
   loadJSONToForm(connections_ui);
   g_signal_connect(connections_ui->selection_model, "selection-changed", G_CALLBACK(selectionChanged), connections_ui);
-
-  
+  // LAYOUT
   connections_ui->fixed = gtk_fixed_new();
 
   // TEXT 
   connections_ui->label = gtk_label_new("Conexão MQTT");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_title");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_title");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 10, 30);
 
 // NAME 
   connections_ui->label = gtk_label_new("Nome");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_name");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_name");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 30, 90);
   connections_ui->entry_name = gtk_entry_new();
   gtk_widget_set_size_request(connections_ui->entry_name, 300, -1);
-  gtk_widget_add_css_class(connections_ui->entry_name, "form_entry_name");
+  gtk_widget_add_css_class(connections_ui->entry_name, "connections_entry_name");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_name, 30, 110);
   
   // PORT 
   connections_ui->label = gtk_label_new("Porta");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_port");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_port");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 600, 190);
   connections_ui->buffer = gtk_entry_buffer_new("1883", 4);
   connections_ui->entry_port = gtk_entry_new_with_buffer(connections_ui->buffer);
   gtk_widget_set_size_request(connections_ui->entry_port, 120, -1);
-  gtk_widget_add_css_class(connections_ui->entry_port, "form_entry_port");
+  gtk_widget_add_css_class(connections_ui->entry_port, "connections_entry_port");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_port, 600, 210);
 
   // PROTOCOL
   connections_ui->label = gtk_label_new("Protocolo");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_protocol");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_protocol");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 30, 190);
   const char *strings[3] = {"mqtt//:", "ws://", NULL};
   connections_ui->dropdown_protocol = gtk_drop_down_new_from_strings(strings);
   gtk_drop_down_set_show_arrow(GTK_DROP_DOWN(connections_ui->dropdown_protocol), TRUE);
   gtk_widget_set_size_request(connections_ui->dropdown_protocol, 100, -1);
-  gtk_widget_add_css_class(connections_ui->dropdown_protocol, "form_dropdown_protocol");
+  gtk_widget_add_css_class(connections_ui->dropdown_protocol, "connections_dropdown_protocol");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->dropdown_protocol, 30, 210);
 
   // HOST
   connections_ui->label = gtk_label_new("Host");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_host");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_host");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 160, 190);
   connections_ui->entry_host = gtk_entry_new();
   gtk_widget_set_size_request(connections_ui->entry_host, 410, -1);
-  gtk_widget_add_css_class(connections_ui->entry_host, "form_entry_host");
+  gtk_widget_add_css_class(connections_ui->entry_host, "connections_entry_host");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_host, 160, 210);
 
   // USERNAME 
   connections_ui->label = gtk_label_new("Username");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_username");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_username");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 30, 310);
   connections_ui->entry_username = gtk_entry_new();
   gtk_widget_set_size_request(connections_ui->entry_username, 330, -1);
-  gtk_widget_add_css_class(connections_ui->entry_username, "form_entry_username");
+  gtk_widget_add_css_class(connections_ui->entry_username, "connections_entry_username");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_username, 30, 330);
 
   // PASSWORD
   connections_ui->label = gtk_label_new("Password");
-  gtk_widget_add_css_class(connections_ui->label, "form_label_password");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_password");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 390, 310);
   connections_ui->entry_password = gtk_entry_new();
   gtk_widget_set_size_request(connections_ui->entry_password, 310, -1);
-  gtk_widget_add_css_class(connections_ui->entry_password, "form_entry_password");
+  gtk_widget_add_css_class(connections_ui->entry_password, "connections_entry_password");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_password, 390, 330);
 
   // SIGNALS (FORM SECTION)
@@ -87,29 +86,29 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
 
   // CONNECT (BUTTON)
   createButtonWithImageLabel(&connections_ui->button_connect, CONNECTION_ACTIVATE_PATH, "CONECTAR");
-  gtk_widget_add_css_class(connections_ui->button_connect.button, "form_button_connect");
-  gtk_widget_add_css_class(connections_ui->button_connect.label, "form_button_connect_label");
+  gtk_widget_add_css_class(connections_ui->button_connect.button, "connections_button_connect");
+  gtk_widget_add_css_class(connections_ui->button_connect.label, "connections_button_connect_label");
   gtk_widget_set_size_request(connections_ui->button_connect.button, 75, 35);
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->button_connect.button, 570, 430);
 
   // SAVE (BUTTON)
   createButtonWithImageLabel(&connections_ui->button_save, CONNECTION_SAVE_PATH, "SALVAR");
-  gtk_widget_add_css_class(connections_ui->button_save.button, "form_button_save");
-  gtk_widget_add_css_class(connections_ui->button_save.label, "form_button_save_label");
+  gtk_widget_add_css_class(connections_ui->button_save.button, "connections_button_save");
+  gtk_widget_add_css_class(connections_ui->button_save.label, "connections_button_save_label");
   gtk_widget_set_size_request(connections_ui->button_save.button, 70, 35);
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->button_save.button, 420, 430);
   
   // DELETE (BUTTON)
   createButtonWithImageLabel(&connections_ui->button_delete, CONNECTION_DELETE_PATH, "REMOVER");
-  gtk_widget_add_css_class(connections_ui->button_delete.button, "form_button_delete");
-  gtk_widget_add_css_class(connections_ui->button_delete.label, "form_button_delete_label");
+  gtk_widget_add_css_class(connections_ui->button_delete.button, "connections_button_delete");
+  gtk_widget_add_css_class(connections_ui->button_delete.label, "connections_button_delete_label");
   gtk_widget_set_size_request(connections_ui->button_delete.button, 70, 35);
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->button_delete.button, 30, 430);
 
   // OPTIONS (BUTTON)
   createButtonWithImageLabel(&connections_ui->button_options, CONNECTION_OPTIONS_PATH, "OPÇÕES");
-  gtk_widget_add_css_class(connections_ui->button_options.button, "form_button_options");
-  gtk_widget_add_css_class(connections_ui->button_options.label, "form_button_options_label");
+  gtk_widget_add_css_class(connections_ui->button_options.button, "connections_button_options");
+  gtk_widget_add_css_class(connections_ui->button_options.label, "connections_button_options_label");
   gtk_widget_set_size_request(connections_ui->button_options.button, 70, 35);
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->button_options.button, 190, 430);
 
