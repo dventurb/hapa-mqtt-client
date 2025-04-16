@@ -7,7 +7,7 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
 
   // SELECTION MODEL - Allows selecting a single connection from the list store.
   connections_ui->selection_model = gtk_single_selection_new(G_LIST_MODEL(connections_ui->connection_store));
-  //loadJSONToForm(form_ui);
+  loadJSONToForm(connections_ui);
   g_signal_connect(connections_ui->selection_model, "selection-changed", G_CALLBACK(selectionChanged), connections_ui);
 
   

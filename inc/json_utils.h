@@ -11,11 +11,11 @@
 // CIRCULAR DEPENDENCIE - This is to fix the circular dependencie of 
 // ui_form.h -> json_uitls.h || json_uitls.h -> ui_form.h 
 // Maybe I will just put the structs types in one file together.
-typedef struct _ST_FormUI ST_FormUI;
+typedef struct _ST_ConnectionsUI ST_ConnectionsUI;
 
 void addConnectionToJSON(STMQTTConnection *connection);
 void updateConnectionInJSON(STMQTTConnection *connection);
-void loadJSONToForm(ST_FormUI *form_ui);
+void loadJSONToForm(ST_ConnectionsUI *connections_ui);
 void deleteConnectionInJSON(STMQTTConnection *connection);
 
 #endif

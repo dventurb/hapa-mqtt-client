@@ -2,7 +2,7 @@
 // https://json-c.github.io/json-c/json-c-0.10/doc/html/index.html
 
 #include "json_utils.h"
-#include "ui_form.h"
+#include "ui_connections.h"
 
 void addConnectionToJSON(STMQTTConnection *connection){
   FILE *file = fopen(SETTINGS_JSON_PATH, "r");
@@ -108,7 +108,7 @@ void updateConnectionInJSON(STMQTTConnection *connection){
 }
 
 // I found a better way to load the data from JSON.
-void loadJSONToForm(ST_FormUI *form_ui){
+void loadJSONToForm(ST_ConnectionsUI *connections_ui){
   FILE *file = fopen(SETTINGS_JSON_PATH, "r");
   if(!file){
     return;
@@ -142,7 +142,7 @@ void loadJSONToForm(ST_FormUI *form_ui){
     
   json_object_object_foreach(json_connections, key, val){
     STMQTTConnection *connection = stMQTTConnectionNew();
-    g_list_store_append(form_ui->connection_store, connection);
+    g_list_store_append(connections_ui->connection_store, connection);
     struct json_object *name, *port, *protocol, *host, *username, *password;
     stMQTTConnectionSetID(connection, strdup(key));
     name = json_object_object_get(val, "name");

@@ -7,7 +7,7 @@
 #include "paths.h"
 #include "json_utils.h"
 
-typedef struct {
+typedef struct _ST_ConnectionsUI {
   GListStore *connection_store;
   GtkSingleSelection *selection_model;
   GtkWidget *fixed;
