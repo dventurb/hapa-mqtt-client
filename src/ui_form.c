@@ -17,9 +17,6 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_widget_set_vexpand(form_ui->box_connections, FALSE);
   gtk_widget_set_hexpand(form_ui->box_connections, FALSE);
   gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->box_connections);
-
-  // LIST STORE - This is where the MQTT connections will be stored.
-  form_ui->connection_store = g_list_store_new(ST_TYPE_MQTT_CONNECTION);
   
   // IMAGE (CONNECTION ADD)
   form_ui->image = gtk_image_new_from_file(CONNECTION_ADD_PATH); 
@@ -38,10 +35,22 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_widget_add_css_class(form_ui->label, "form_label_connections");
   gtk_box_append(GTK_BOX(form_ui->box_connections), form_ui->label);
 
-  // SELECTION MODEL - Allows selecting a single connection from the list store.
-  form_ui->selection_model = gtk_single_selection_new(G_LIST_MODEL(form_ui->connection_store));
-  //loadJSONToForm(form_ui);
-  g_signal_connect(form_ui->selection_model, "selection-changed", G_CALLBACK(selectionChanged), form_ui);
+  // STACK - Two stack pages for connection simple data (CONNECTION SECTION) 
+  // and other for connections topics and QOS (TOPICS SECTION).
+  form_ui->stack = gtk_stack_new();
+  gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
+ gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->stack);
+
+ // STACK - Connection Section  
+  initConnectionsUI(&form_ui->connections_ui, form_ui->stack);
+  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->connections_ui.fixed, "connections");
+  
+  // STACK - Topics Section
+  initTopicsUI(&form_ui->topics_ui, form_ui->stack);
+  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->topics_ui.fixed, "topics");
+ 
+  // STACK - Start in the Connections Page.
+  gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "connections");
 
   // FACTORY - Provides a visual representation of each connection in the list view.
   form_ui->factory = gtk_signal_list_item_factory_new();
@@ -49,7 +58,7 @@ void initFormUI(ST_FormUI *form_ui){
   g_signal_connect(form_ui->factory, "bind", G_CALLBACK(bindFactory), form_ui);
 
   // LIST VIEW 
-  form_ui->list_view = gtk_list_view_new(GTK_SELECTION_MODEL(form_ui->selection_model), form_ui->factory);
+  form_ui->list_view = gtk_list_view_new(GTK_SELECTION_MODEL(form_ui->connections_ui.selection_model), form_ui->factory);
   gtk_widget_add_css_class(form_ui->list_view, "form_listview");
 
   // SCROLLED 
@@ -58,178 +67,6 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_box_append(GTK_BOX(form_ui->box_connections), form_ui->scrolled);
   gtk_widget_set_hexpand(form_ui->scrolled, TRUE);
   gtk_widget_set_vexpand(form_ui->scrolled, TRUE);
-
-  // STACK - Two stack pages for connection simple data (CONNECTION SECTION) 
-  // and other for connections topics and QOS (TOPICS SECTION).
-  // Maybe will divide the ST_FormUI into two structs for each section.
-
-
-  /* -------------------------- CONNECTION SECTION (START) -------------------------- */
- 
-  // I divide the form into two stack pages, one with the basic connection data 
-  // and the other with the options for that connection, where the user can add 
-  // topics, QOS and other things. 
-
-  // CONNECTION SECTION - Entry and labels for the MQTT connection.
-  
-  form_ui->fixed = gtk_fixed_new();
-
-  // TEXT 
-  form_ui->label = gtk_label_new("Conexão MQTT");
-  gtk_widget_add_css_class(form_ui->label, "form_label_title");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 10, 30);
-  
-  // NAME 
-  form_ui->label = gtk_label_new("Nome");
-  gtk_widget_add_css_class(form_ui->label, "form_label_name");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 30, 90);
-  form_ui->entry_name = gtk_entry_new();
-  gtk_widget_set_size_request(form_ui->entry_name, 300, -1);
-  gtk_widget_add_css_class(form_ui->entry_name, "form_entry_name");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->entry_name, 30, 110);
-  
-  // PORT 
-  form_ui->label = gtk_label_new("Porta");
-  gtk_widget_add_css_class(form_ui->label, "form_label_port");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 600, 190);
-  form_ui->buffer = gtk_entry_buffer_new("1883", 4);
-  form_ui->entry_port = gtk_entry_new_with_buffer(form_ui->buffer);
-  gtk_widget_set_size_request(form_ui->entry_port, 120, -1);
-  gtk_widget_add_css_class(form_ui->entry_port, "form_entry_port");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->entry_port, 600, 210);
-
-  // PROTOCOL
-  form_ui->label = gtk_label_new("Protocolo");
-  gtk_widget_add_css_class(form_ui->label, "form_label_protocol");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 30, 190);
-  const char *strings[3] = {"mqtt//:", "ws://", NULL};
-  form_ui->dropdown_protocol = gtk_drop_down_new_from_strings(strings);
-  gtk_drop_down_set_show_arrow(GTK_DROP_DOWN(form_ui->dropdown_protocol), TRUE);
-  gtk_widget_set_size_request(form_ui->dropdown_protocol, 100, -1);
-  gtk_widget_add_css_class(form_ui->dropdown_protocol, "form_dropdown_protocol");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->dropdown_protocol, 30, 210);
-
-  // HOST
-  form_ui->label = gtk_label_new("Host");
-  gtk_widget_add_css_class(form_ui->label, "form_label_host");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 160, 190);
-  form_ui->entry_host = gtk_entry_new();
-  gtk_widget_set_size_request(form_ui->entry_host, 410, -1);
-  gtk_widget_add_css_class(form_ui->entry_host, "form_entry_host");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->entry_host, 160, 210);
-
-  // USERNAME 
-  form_ui->label = gtk_label_new("Username");
-  gtk_widget_add_css_class(form_ui->label, "form_label_username");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 30, 310);
-  form_ui->entry_username = gtk_entry_new();
-  gtk_widget_set_size_request(form_ui->entry_username, 330, -1);
-  gtk_widget_add_css_class(form_ui->entry_username, "form_entry_username");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->entry_username, 30, 330);
-
-  // PASSWORD
-  form_ui->label = gtk_label_new("Password");
-  gtk_widget_add_css_class(form_ui->label, "form_label_password");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->label, 390, 310);
-  form_ui->entry_password = gtk_entry_new();
-  gtk_widget_set_size_request(form_ui->entry_password, 310, -1);
-  gtk_widget_add_css_class(form_ui->entry_password, "form_entry_password");
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->entry_password, 390, 330);
-
-  // SIGNALS (FORM SECTION)
-  g_signal_connect(form_ui->entry_name, "changed", G_CALLBACK(entryNameChanged), form_ui);
-  g_signal_connect(form_ui->entry_port, "changed", G_CALLBACK(entryPortChanged), form_ui);
-  g_signal_connect(form_ui->dropdown_protocol, "notify::selected", G_CALLBACK(dropdownProtocolChanged), form_ui);
-  g_signal_connect(form_ui->entry_host, "changed", G_CALLBACK(entryHostChanged), form_ui);
-  g_signal_connect(form_ui->entry_username, "changed", G_CALLBACK(entryUsernameChanged), form_ui);
-  g_signal_connect(form_ui->entry_password, "changed", G_CALLBACK(entryPasswordChanged), form_ui);
-
-  // BUTTONS (CONNECTION SECTION)
-
-  // CONNECT (BUTTON)
-  createButtonWithImageLabel(&form_ui->button_connect, CONNECTION_ACTIVATE_PATH, "CONECTAR");
-  gtk_widget_add_css_class(form_ui->button_connect.button, "form_button_connect");
-  gtk_widget_add_css_class(form_ui->button_connect.label, "form_button_connect_label");
-  gtk_widget_set_size_request(form_ui->button_connect.button, 75, 35);
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->button_connect.button, 570, 430);
-
-  // SAVE (BUTTON)
-  createButtonWithImageLabel(&form_ui->button_save, CONNECTION_SAVE_PATH, "SALVAR");
-  gtk_widget_add_css_class(form_ui->button_save.button, "form_button_save");
-  gtk_widget_add_css_class(form_ui->button_save.label, "form_button_save_label");
-  gtk_widget_set_size_request(form_ui->button_save.button, 70, 35);
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->button_save.button, 420, 430);
-  
-  // DELETE (BUTTON)
-  createButtonWithImageLabel(&form_ui->button_delete, CONNECTION_DELETE_PATH, "REMOVER");
-  gtk_widget_add_css_class(form_ui->button_delete.button, "form_button_delete");
-  gtk_widget_add_css_class(form_ui->button_delete.label, "form_button_delete_label");
-  gtk_widget_set_size_request(form_ui->button_delete.button, 70, 35);
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->button_delete.button, 30, 430);
-
-  // OPTIONS (BUTTON)
-  createButtonWithImageLabel(&form_ui->button_options, CONNECTION_OPTIONS_PATH, "OPÇÕES");
-  gtk_widget_add_css_class(form_ui->button_options.button, "form_button_options");
-  gtk_widget_add_css_class(form_ui->button_options.label, "form_button_options_label");
-  gtk_widget_set_size_request(form_ui->button_options.button, 70, 35);
-  gtk_fixed_put(GTK_FIXED(form_ui->fixed), form_ui->button_options.button, 190, 430);
-
-  // SIGNALS (BUTTONS)
-  g_signal_connect(form_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), form_ui);
-  g_signal_connect(form_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), form_ui);
-  g_signal_connect(form_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), form_ui);
- 
-
-  /* -------------------------- CONNECTION SECTION (END) -------------------------- */
-
-  form_ui->stack = gtk_stack_new();
-  gtk_stack_set_transition_type(GTK_STACK(form_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
-
- gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->fixed, "connections");
- gtk_box_append(GTK_BOX(form_ui->main_box), form_ui->stack);
- 
-  /* -------------------------- TOPICS SECTION (START) -------------------------- */
- 
-  // TOPICS SECTION - Entry and labels for the MQTT topics.
-  
-  initTopicsUI(&form_ui->topics_ui, form_ui->stack);
-  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->topics_ui.fixed, "topics");
-  
-  gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "connections");
-}
-
-void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  g_signal_handlers_block_by_func(form_ui->entry_name, entryNameChanged, form_ui);
-
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_name));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetName(connection), -1);
- 
-  int length = snprintf(NULL, 0, "%d", stMQTTConnectionGetPort(connection));
-  char *port = malloc(length + 1);
-  sprintf(port, "%d", stMQTTConnectionGetPort(connection));
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_port));
-  gtk_entry_buffer_set_text(buffer, port, -1);
-  free(port);
-
-  if((strcmp(stMQTTConnectionGetProtocol(connection), "ws")) == 0){
-    gtk_drop_down_set_selected(GTK_DROP_DOWN(form_ui->dropdown_protocol), 1);
-  }else {
-    gtk_drop_down_set_selected(GTK_DROP_DOWN(form_ui->dropdown_protocol), 0);
-  }
-
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_host));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetHost(connection) ,-1);
-
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_username));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetUsername(connection), -1);
-
-  // FIX: Set password buffer 
-
-  g_signal_handlers_unblock_by_func(form_ui->entry_name, entryNameChanged, form_ui);
 }
 
 // SETUP - creates the visual structure of the item (initially). 
@@ -275,114 +112,10 @@ void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_d
 void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
   ST_FormUI *form_ui = (ST_FormUI *)user_data;
   STMQTTConnection *connection = stMQTTConnectionNew();
-  int position = g_list_model_get_n_items(G_LIST_MODEL(form_ui->connection_store)) - 1;
+  int position = g_list_model_get_n_items(G_LIST_MODEL(form_ui->connections_ui.connection_store)) - 1;
   stMQTTConnectionSetID(connection, getID());
   addConnectionToJSON(connection);
-  g_list_store_append(form_ui->connection_store, connection);
-  gtk_single_selection_set_selected(form_ui->selection_model, position);
-}
-
-void entryNameChanged(GtkEntry *entry_name, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-  
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_name));
-  const char *name = gtk_entry_buffer_get_text(buffer);
-  stMQTTConnectionSetName(connection, name);
-
-  g_list_model_items_changed(G_LIST_MODEL(form_ui->connection_store), position, 1, 1);
-  g_object_unref(connection);
-}
-
-void entryPortChanged(GtkEntry *entry_port, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_port));
-  const char *port = gtk_entry_buffer_get_text(buffer);
-  long int number = strtol(port, NULL, 10);
-  stMQTTConnectionSetPort(connection, (int)number);
-
-  g_list_model_items_changed(G_LIST_MODEL(form_ui->connection_store), position, 1, 1);
-  g_object_unref(connection);
-}
-
-void dropdownProtocolChanged(GObject *object, GParamSpec *pspec, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  int item = gtk_drop_down_get_selected(GTK_DROP_DOWN(form_ui->dropdown_protocol));
-  if(item == 0){
-    stMQTTConnectionSetProtocol(connection, "mqtt");
-  }else if (item == 1){
-    stMQTTConnectionSetProtocol(connection, "ws");
-  }
-
-  g_list_model_items_changed(G_LIST_MODEL(form_ui->connection_store), position, 1, 1);
-  g_object_unref(connection);
-}
-
-void entryHostChanged(GtkEntry *entry_host, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_host));
-  const char *host = gtk_entry_buffer_get_text(buffer);
-  stMQTTConnectionSetHost(connection, host);
-
-  g_list_model_items_changed(G_LIST_MODEL(form_ui->connection_store), position, 1, 1);
-  g_object_unref(connection);
-}
-
-void entryUsernameChanged(GtkEntry *entry_username, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->entry_host));
-  const char *username = gtk_entry_buffer_get_text(buffer);
-  stMQTTConnectionSetUsername(connection, username);
-
-  g_list_model_items_changed(G_LIST_MODEL(form_ui->connection_store), position, 1, 1);
-  g_object_unref(connection);
-}
-
-// FIX: Password does not updating
-void entryPasswordChanged(GtkEntry *entry_password, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-
-  GtkEditable *editable = GTK_EDITABLE(form_ui->entry_password);
-  const char *password = gtk_editable_get_text(editable);
-  stMQTTConnectionSetPassword(connection, password);
-
-  g_object_unref(connection);
-}
-
-void saveConnection(GtkButton *button, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-  updateConnectionInJSON(connection);
-}
-
-void deleteConnection(GtkButton *button, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-  int position = gtk_single_selection_get_selected(form_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connection_store), position);
-  g_list_store_remove(form_ui->connection_store, position);
-  deleteConnectionInJSON(connection);
-  stMQTTConnectionFree(connection);
-}
-
-void switchToTopics(GtkButton *button, gpointer user_data){
-  ST_FormUI *form_ui = (ST_FormUI *)user_data;
-
-  gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "topics");
+  g_list_store_append(form_ui->connections_ui.connection_store, connection);
+  gtk_single_selection_set_selected(form_ui->connections_ui.selection_model, position);
 }
 
