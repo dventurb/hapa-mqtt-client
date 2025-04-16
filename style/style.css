@@ -299,7 +299,7 @@ border-bottom: 3px solid #0b5fb3;
   font-weight: Bold;
 }
 
-.form_button_advance {
+.form_button_options {
   border-radius: 0;
   border: 0.9px solid #D0D0D0;
   background-color: #F8F8F8;
@@ -452,8 +452,9 @@ border-bottom: 3px solid #0b5fb3;
   border-radius: 5px;
   background-color: #ffffff;
   box-shadow: 0 1px 0 0 #ccc; 
-  margin-bottom: 0.5px;
   border-bottom: 0.5px solid #ccc;
+  border-right: 0.2px solid #ccc;
+  border-left: 0.2px solid #ccc;
   transition: background-color 200ms ease;
 }
 
@@ -493,6 +494,23 @@ border-bottom: 3px solid #0b5fb3;
   border-radius: 5px;
   background-color: #ffffff;
   box-shadow: 0 1px 0 0 #ccc; 
-  margin-bottom: 0.5px;
   border-bottom: 0.5px solid #ccc;
+}
+
+.topics_button_back {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_back:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_back_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
 }

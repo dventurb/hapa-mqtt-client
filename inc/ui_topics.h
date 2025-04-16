@@ -6,6 +6,7 @@
 #include "paths.h"
 #include "topic.h"
 
+
 typedef struct {
   GtkWidget *fixed;
   GtkWidget *label;
@@ -24,10 +25,11 @@ typedef struct {
   ST_BUTTON button_delete;
 }ST_TopicsUI;
 
-void initTopicsUI(ST_TopicsUI *topics_ui);
+void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack);
 void addTopic(GtkButton *button, gpointer user_data);
 void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void bindFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data);
+void switchToConnection(GtkButton *button, gpointer user_data);
 
 #endif

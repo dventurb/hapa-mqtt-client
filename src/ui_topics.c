@@ -1,6 +1,6 @@
 #include "ui_topics.h"
 
-void initTopicsUI(ST_TopicsUI *topics_ui){
+void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack){
   topics_ui->fixed = gtk_fixed_new();
 
   // TEXT 
@@ -33,7 +33,7 @@ void initTopicsUI(ST_TopicsUI *topics_ui){
   gtk_widget_add_css_class(topics_ui->button_add.button, "topics_button_add");
   gtk_widget_add_css_class(topics_ui->button_add.label, "topics_button_add_label");
   gtk_widget_set_size_request(topics_ui->button_add.button, 40, 35);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 110);
+gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 110);
   g_signal_connect(topics_ui->button_add.button, "clicked", G_CALLBACK(addTopic), topics_ui);
 
   // LIST STORE (TOPICS)
@@ -71,8 +71,17 @@ void initTopicsUI(ST_TopicsUI *topics_ui){
   gtk_widget_add_css_class(topics_ui->box_topics, "topics_list_box");
   gtk_box_append(GTK_BOX(topics_ui->box_topics), topics_ui->list_view);
   gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(topics_ui->scrolled), topics_ui->box_topics);
-  gtk_widget_set_size_request(topics_ui->scrolled, 660, 240);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->scrolled, 30, 150); 
+  gtk_widget_set_size_request(topics_ui->scrolled, 660, 260);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->scrolled, 30, 150);
+
+  // BUTTON (BACK)
+  createButtonWithImageLabel(&topics_ui->button_back, TOPIC_BACK_PATH, "VOLTAR");
+  gtk_widget_add_css_class(topics_ui->button_back.button, "topics_button_back");
+  gtk_widget_add_css_class(topics_ui->button_back.label, "topics_button_back_label");
+  gtk_widget_set_size_request(topics_ui->button_back.button, 40, 35);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_back.button, 570, 430);
+  
+  g_signal_connect(topics_ui->button_back.button, "clicked", G_CALLBACK(switchToConnection), stack);
 }
 
 void addTopic(GtkButton *button, gpointer user_data){
@@ -149,4 +158,10 @@ void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpo
   int position = gtk_list_item_get_position(GTK_LIST_ITEM(item));
 
   g_list_store_remove(topics_ui->topics_store, position);
+}
+
+void switchToConnection(GtkButton *button, gpointer user_data){
+  GtkWidget *stack = (GtkWidget *)user_data;
+
+  gtk_stack_set_visible_child_name(GTK_STACK(stack), "connections");
 }
