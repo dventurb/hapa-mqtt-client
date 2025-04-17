@@ -202,10 +202,12 @@ void saveConnection(GtkButton *button, gpointer user_data){
 void deleteConnection(GtkButton *button, gpointer user_data){
   ST_ConnectionsUI *connections_ui = (ST_ConnectionsUI *)user_data;
   int position = gtk_single_selection_get_selected(connections_ui->selection_model);
-  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
-  g_list_store_remove(connections_ui->connection_store, position);
-  deleteConnectionInJSON(connection);
-  stMQTTConnectionFree(connection);
+  if(position > 0){
+    STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
+    g_list_store_remove(connections_ui->connection_store, position);
+    deleteConnectionInJSON(connection);
+    stMQTTConnectionFree(connection);
+  }
 }
 
 void switchToTopics(GtkButton *button, gpointer user_data){

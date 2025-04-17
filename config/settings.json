@@ -1,23 +1,5 @@
 {
   "ConnectionsSettings":{
-    "f4f3dc84-4683-4037-b9dc-876e0ec3818d":{
-      "name":"nova conexão",
-      "port":1883,
-      "protocol":"mqtt",
-      "host":"",
-      "username":"",
-      "password":"",
-      "client_id":""
-    },
-    "c53d4c74-5872-4095-9cb5-5dcbae403216":{
-      "name":"nova conexão",
-      "port":1883,
-      "protocol":"mqtt",
-      "host":"",
-      "username":"",
-      "password":"",
-      "client_id":""
-    },
     "d35e9442-dfae-4485-9f9e-18dcd20d5279":{
       "name":"nova conexão",
       "port":1883,
