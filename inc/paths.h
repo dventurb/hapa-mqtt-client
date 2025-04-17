@@ -20,6 +20,7 @@
 #define TOPIC_ADD_PATH "icons/actions/topic-add.png"
 #define TOPIC_DELETE_PATH "icons/actions/topic-delete.png"
 #define TOPIC_BACK_PATH "icons/actions/topic-back.png"
+#define TOPIC_CERTIFICATES_PATH "icons/actions/topic-certificates.png"
 
 #endif 
 

@@ -75,7 +75,14 @@ gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 11
   gtk_widget_add_css_class(topics_ui->button_back.label, "topics_button_back_label");
   gtk_widget_set_size_request(topics_ui->button_back.button, 40, 35);
   gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_back.button, 570, 430);
-  
+ 
+  // BUTTON (CERTIFICATES)
+  createButtonWithImageLabel(&topics_ui->button_certificates, TOPIC_CERTIFICATES_PATH, "CERTIFICADOS");
+  gtk_widget_add_css_class(topics_ui->button_certificates.button, "topics_button_certificates");
+  gtk_widget_add_css_class(topics_ui->button_certificates.label, "topics_button_certificates_label");
+  gtk_widget_set_size_request(topics_ui->button_certificates.button, 40, 35);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_certificates.button, 370, 430);
+
   g_signal_connect(topics_ui->button_back.button, "clicked", G_CALLBACK(switchToConnection), stack);
 }
 
@@ -95,7 +102,7 @@ void addNewTopic(GtkButton *button, gpointer user_data){
     stMQTTTopicSetQoS(topic, "2");
   }
   g_list_store_append(topics_ui->topics_store, topic);
-  g_print("Tópicos: %u\n", g_list_model_get_n_items(G_LIST_MODEL(topics_ui->topics_store)));  // For Debug
+ // g_print("Tópicos: %u\n", g_list_model_get_n_items(G_LIST_MODEL(topics_ui->topics_store)));  // For Debug
 } 
 
 static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){

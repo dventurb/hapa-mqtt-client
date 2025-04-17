@@ -21,7 +21,7 @@ typedef struct {
   GtkNoSelection *no_selection;
   ST_BUTTON button_add;
   ST_BUTTON button_back;
-  ST_BUTTON button_certificate;
+  ST_BUTTON button_certificates;
   ST_BUTTON button_delete;
   STMQTTConnection *connection;
 }ST_TopicsUI;

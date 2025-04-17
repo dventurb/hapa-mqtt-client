@@ -519,3 +519,21 @@ border-bottom: 3px solid #0b5fb3;
   font-family: 'Arial';
   font-weight: Bold;
 }
+
+.topics_button_certificates {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_certificates:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_certificates_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
