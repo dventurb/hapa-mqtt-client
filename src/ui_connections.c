@@ -3,7 +3,7 @@
 void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   // LAYOUT
   connections_ui->fixed = gtk_fixed_new();
-
+  
   // TEXT 
   connections_ui->label = gtk_label_new("Conexão MQTT");
   gtk_widget_add_css_class(connections_ui->label, "connections_label_title");
@@ -108,6 +108,9 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   g_signal_connect(connections_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), connections_ui);
   g_signal_connect(connections_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), connections_ui);
   g_signal_connect(connections_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), stack);
+
+  // NOTIFICATION
+
 }
 
 void entryNameChanged(GtkEntry *entry_name, gpointer user_data){

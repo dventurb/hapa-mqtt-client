@@ -139,6 +139,14 @@
 
 
 /* ------------------------------ CONNECTIONS SECTION STYLE ------------------------------ */
+/* - TODO
+.notification {
+  background-color: #0b5fb3;
+  color: white;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+}*/
 
 .connections_label_title {
   font-family: 'Arial';

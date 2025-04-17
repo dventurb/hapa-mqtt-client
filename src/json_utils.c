@@ -54,6 +54,16 @@ void addConnectionToJSON(STMQTTConnection *connection){
   json_object_object_add(new_json_connection, "password", json_object_new_string(password));
   const char *client_id = stMQTTConnectionGetClientID(connection);
   json_object_object_add(new_json_connection, "client_id", json_object_new_string(client_id));
+  int max_itens = g_list_model_get_n_items(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)));
+  struct json_object *json_array = json_object_new_array();
+  for(int i = 0; i < max_itens; i++){
+    STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)), i);
+    struct json_object *json_topics = json_object_new_object();
+    json_object_object_add(json_topics, "topic", json_object_new_string(stMQTTTopicGetName(topic)));
+    json_object_object_add(json_topics, "qos", json_object_new_string(stMQTTTopicGetQoS(topic)));
+    json_object_array_put_idx(json_array, i, json_topics);
+  }
+  json_object_object_add(new_json_connection, "subscriptions", json_array);
   json_object_object_add(json_connections, stMQTTConnectionGetConnectionID(connection), new_json_connection);
 
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
@@ -106,7 +116,7 @@ void updateConnectionInJSON(STMQTTConnection *connection){
   json_object_object_add(update_json_connection, "password", json_object_new_string(password));
   const char *client_id = stMQTTConnectionGetClientID(connection);
   json_object_object_add(update_json_connection, "client_id", json_object_new_string(client_id));
-
+  
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
 }

@@ -106,6 +106,7 @@ gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 11
 
 void addNewTopic(GtkButton *button, gpointer user_data){
   ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  //STMQTTConnection *connection = topics_ui->connection; 
   STMQTTTopic *topic = stMQTTTopicNew();
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(topics_ui->entry_topic));
   const char *name = gtk_entry_buffer_get_text(buffer);
@@ -120,6 +121,7 @@ void addNewTopic(GtkButton *button, gpointer user_data){
     stMQTTTopicSetQoS(topic, "2");
   }
   g_list_store_append(topics_ui->topics_store, topic);
+  addConnectionToJSON(topics_ui->connection);
  // g_print("Tópicos: %u\n", g_list_model_get_n_items(G_LIST_MODEL(topics_ui->topics_store)));  // For Debug
 } 
 

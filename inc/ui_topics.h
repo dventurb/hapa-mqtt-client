@@ -21,6 +21,7 @@ typedef struct {
   GtkListItemFactory *factory;
   GListStore *topics_store;
   GtkNoSelection *no_selection;
+  GtkWidget *popover;
   ST_BUTTON button_add;
   ST_BUTTON button_back;
   ST_BUTTON button_certificates;
