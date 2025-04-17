@@ -204,8 +204,9 @@ void saveConnection(GtkButton *button, gpointer user_data){
 
 void deleteConnection(GtkButton *button, gpointer user_data){
   ST_ConnectionsUI *connections_ui = (ST_ConnectionsUI *)user_data;
+  int n_items = g_list_model_get_n_items(G_LIST_MODEL(connections_ui->connection_store));
   int position = gtk_single_selection_get_selected(connections_ui->selection_model);
-  if(position > 0){
+  if(n_items > 1){
     STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
     g_list_store_remove(connections_ui->connection_store, position);
     deleteConnectionInJSON(connection);
