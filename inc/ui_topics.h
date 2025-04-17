@@ -5,7 +5,7 @@
 #include "widgets.h"
 #include "paths.h"
 #include "topic.h"
-
+#include "connection.h"
 
 typedef struct {
   GtkWidget *fixed;
@@ -23,12 +23,13 @@ typedef struct {
   ST_BUTTON button_back;
   ST_BUTTON button_certificate;
   ST_BUTTON button_delete;
+  STMQTTConnection *connection;
 }ST_TopicsUI;
 
 void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack);
-void addTopic(GtkButton *button, gpointer user_data);
-void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
-void bindFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+void addNewTopic(GtkButton *button, gpointer user_data);
+static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data);
 void switchToConnection(GtkButton *button, gpointer user_data);
 

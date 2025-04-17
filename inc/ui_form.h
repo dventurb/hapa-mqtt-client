@@ -2,7 +2,6 @@
 #define UI_FORM_H 
 
 #include <gtk/gtk.h>
-#include "connection.h"
 #include "topic.h"
 #include "json_utils.h"
 #include "widgets.h"
@@ -27,9 +26,12 @@ typedef struct _ST_FormUI {
   ST_TopicsUI topics_ui;
 }ST_FormUI;
 
+typedef struct _STMQTTConnection _STMQTTConnection;
+
+void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
 void initFormUI(ST_FormUI *form_ui);
-void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
-void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 
 

@@ -27,6 +27,7 @@ G_DECLARE_FINAL_TYPE(STMQTTConnection, st_mqtt_connection, ST, MQTT_Connection, 
 #define stMQTTConnectionGetHost st_mqtt_connection_get_host
 #define stMQTTConnectionGetUsername st_mqtt_connection_get_username
 #define stMQTTConnectionGetPassword st_mqtt_connection_get_password
+#define stMQTTConnectionGetTopics st_mqtt_connection_get_topics
 #define stMQTTConnectionSetName st_mqtt_connection_set_name
 #define stMQTTConnectionSetID st_mqtt_connection_set_id
 #define stMQTTConnectionSetPort st_mqtt_connection_set_port
@@ -34,6 +35,7 @@ G_DECLARE_FINAL_TYPE(STMQTTConnection, st_mqtt_connection, ST, MQTT_Connection, 
 #define stMQTTConnectionSetHost st_mqtt_connection_set_host
 #define stMQTTConnectionSetUsername st_mqtt_connection_set_username
 #define stMQTTConnectionSetPassword st_mqtt_connection_set_password
+#define stMQTTConnectionSetTopics st_mqtt_connection_set_topics
 
 STMQTTConnection *st_mqtt_connection_new(void);
 void st_mqtt_connection_free(STMQTTConnection *self);
@@ -45,6 +47,7 @@ const char *st_mqtt_connection_get_protocol(STMQTTConnection *self);
 const char *st_mqtt_connection_get_host(STMQTTConnection *self);
 const char *st_mqtt_connection_get_username(STMQTTConnection *self);
 const char *st_mqtt_connection_get_password(STMQTTConnection *self);
+GListStore *st_mqtt_connection_get_topics(STMQTTConnection *self);
 
 void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name);
 void st_mqtt_connection_set_id(STMQTTConnection *self, const char *id);
@@ -53,7 +56,7 @@ void st_mqtt_connection_set_protocol(STMQTTConnection *self, const char *protoco
 void st_mqtt_connection_set_host(STMQTTConnection *self, const char *host);
 void st_mqtt_connection_set_username(STMQTTConnection *self, const char *username);
 void st_mqtt_connection_set_password(STMQTTConnection *self, const char *password);
-
+void st_mqtt_connection_set_topics(STMQTTConnection *self, GListStore *store);
 
 G_END_DECLS
 

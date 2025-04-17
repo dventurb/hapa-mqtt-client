@@ -47,6 +47,8 @@ static void st_mqtt_connection_finalize(GObject *object){
   connection->username = NULL;
   free(connection->password);
   connection->password = NULL;
+  free(connection->topics);
+  connection->topics = NULL;
   G_OBJECT_CLASS(st_mqtt_connection_parent_class)->finalize(object);
 }
 
@@ -116,6 +118,10 @@ const char *st_mqtt_connection_get_password(STMQTTConnection *self){
   }
 }
 
+GListStore *st_mqtt_connection_get_topics(STMQTTConnection *self){
+  return self->topics;
+}
+
 void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name){
   if(self->name){
     free(self->name);
@@ -160,5 +166,10 @@ void st_mqtt_connection_set_password(STMQTTConnection *self, const char *passwor
     free(self->password);
   }
   self->password = strdup(password);
+}
+
+void st_mqtt_connection_set_topics(STMQTTConnection *self, GListStore *store){
+  free(self->topics);
+  self->topics = store;
 }
 

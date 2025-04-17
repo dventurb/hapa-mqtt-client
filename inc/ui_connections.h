@@ -26,7 +26,6 @@ typedef struct _ST_ConnectionsUI {
 }ST_ConnectionsUI;
 
 void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack);
-void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
 void entryNameChanged(GtkEntry *entry_name, gpointer user_data);
 void entryPortChanged(GtkEntry *entry_port, gpointer user_data);
 void dropdownProtocolChanged(GObject *object, GParamSpec *pspec, gpointer user_data);

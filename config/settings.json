@@ -15,6 +15,54 @@
       "host":"",
       "username":"",
       "password":""
+    },
+    "d35e9442-dfae-4485-9f9e-18dcd20d5279":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "a0183a67-0b18-444f-9e2d-04cbd230c78f":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "9f2adc21-4564-4348-a3dd-bccbc8ec8a95":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "ab199411-15c4-4722-b163-f2e461f2541a":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "aaafd82e-8195-446b-85b5-a7921e21a4b7":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
+    },
+    "6bf47918-7e77-4d32-9df3-ca8d3e8d9fbb":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":""
     }
   }
 }

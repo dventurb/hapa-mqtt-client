@@ -1,14 +1,6 @@
 #include "ui_connections.h"
 
 void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
-  
-  // LIST STORE - This is where the MQTT connections will be stored.
-  connections_ui->connection_store = g_list_store_new(ST_TYPE_MQTT_CONNECTION);
-
-  // SELECTION MODEL - Allows selecting a single connection from the list store.
-  connections_ui->selection_model = gtk_single_selection_new(G_LIST_MODEL(connections_ui->connection_store));
-  loadJSONToForm(connections_ui);
-  g_signal_connect(connections_ui->selection_model, "selection-changed", G_CALLBACK(selectionChanged), connections_ui);
   // LAYOUT
   connections_ui->fixed = gtk_fixed_new();
 
@@ -116,40 +108,6 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   g_signal_connect(connections_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), connections_ui);
   g_signal_connect(connections_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), connections_ui);
   g_signal_connect(connections_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), stack);
-}
-
-void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){
-  ST_ConnectionsUI *connections_ui = (ST_ConnectionsUI *)user_data;
-  position = gtk_single_selection_get_selected(connections_ui->selection_model);
-  STMQTTConnection *connections = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
-
-  g_signal_handlers_block_by_func(connections_ui->entry_name, entryNameChanged, connections_ui);
-
-  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_name));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetName(connections), -1);
- 
-  int length = snprintf(NULL, 0, "%d", stMQTTConnectionGetPort(connections));
-  char *port = malloc(length + 1);
-  sprintf(port, "%d", stMQTTConnectionGetPort(connections));
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_port));
-  gtk_entry_buffer_set_text(buffer, port, -1);
-  free(port);
-
-  if((strcmp(stMQTTConnectionGetProtocol(connections), "ws")) == 0){
-    gtk_drop_down_set_selected(GTK_DROP_DOWN(connections_ui->dropdown_protocol), 1);
-  }else {
-    gtk_drop_down_set_selected(GTK_DROP_DOWN(connections_ui->dropdown_protocol), 0);
-  }
-
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_host));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetHost(connections) ,-1);
-
-  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_username));
-  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetUsername(connections), -1);
-
-  // FIX: Set password buffer 
-
-  g_signal_handlers_unblock_by_func(connections_ui->entry_name, entryNameChanged, connections_ui);
 }
 
 void entryNameChanged(GtkEntry *entry_name, gpointer user_data){

@@ -34,19 +34,14 @@ void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack){
   gtk_widget_add_css_class(topics_ui->button_add.label, "topics_button_add_label");
   gtk_widget_set_size_request(topics_ui->button_add.button, 40, 35);
 gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 110);
-  g_signal_connect(topics_ui->button_add.button, "clicked", G_CALLBACK(addTopic), topics_ui);
-
-  // LIST STORE (TOPICS)
-  topics_ui->topics_store = g_list_store_new(ST_TYPE_MQTT_TOPIC);
+  g_signal_connect(topics_ui->button_add.button, "clicked", G_CALLBACK(addNewTopic), topics_ui);
 
   // FACTORY
   topics_ui->factory = gtk_signal_list_item_factory_new();
-  g_signal_connect(topics_ui->factory, "setup", G_CALLBACK(setupFactory1), topics_ui);
-  g_signal_connect(topics_ui->factory, "bind", G_CALLBACK(bindFactory1), NULL);
+  g_signal_connect(topics_ui->factory, "setup", G_CALLBACK(setupFactory), topics_ui);
+  g_signal_connect(topics_ui->factory, "bind", G_CALLBACK(bindFactory), NULL);
 
-  topics_ui->no_selection = gtk_no_selection_new(G_LIST_MODEL(topics_ui->topics_store));
-
-  // LIST VIEW
+  // SELECTION MODEL - Topics Section 
   topics_ui->list_view = gtk_list_view_new(GTK_SELECTION_MODEL(topics_ui->no_selection), topics_ui->factory);
 
   // SCROLLED 
@@ -84,10 +79,9 @@ gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 11
   g_signal_connect(topics_ui->button_back.button, "clicked", G_CALLBACK(switchToConnection), stack);
 }
 
-void addTopic(GtkButton *button, gpointer user_data){
+void addNewTopic(GtkButton *button, gpointer user_data){
   ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
   STMQTTTopic *topic = stMQTTTopicNew();
-
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(topics_ui->entry_topic));
   const char *name = gtk_entry_buffer_get_text(buffer);
   stMQTTTopicSetName(topic, name);
@@ -101,9 +95,10 @@ void addTopic(GtkButton *button, gpointer user_data){
     stMQTTTopicSetQoS(topic, "2");
   }
   g_list_store_append(topics_ui->topics_store, topic);
+  g_print("Tópicos: %u\n", g_list_model_get_n_items(G_LIST_MODEL(topics_ui->topics_store)));  // For Debug
 } 
 
-void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
+static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
   ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
 
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
@@ -139,11 +134,11 @@ void setupFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user
   gtk_list_item_set_child(item, box);
 }
 
-void bindFactory1(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
+static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
   STMQTTTopic *topic = gtk_list_item_get_item(item);
 
   GtkWidget *label = g_object_get_data(G_OBJECT(item), "topic");
-  gtk_label_set_max_width_chars(GTK_LABEL(label), 1);
+  gtk_label_set_max_width_chars(GTK_LABEL(label), 100);
   gtk_label_set_text(GTK_LABEL(label), stMQTTTopicGetName(topic));
 
   label = g_object_get_data(G_OBJECT(item), "qos");
