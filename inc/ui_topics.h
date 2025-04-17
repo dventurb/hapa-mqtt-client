@@ -6,11 +6,13 @@
 #include "paths.h"
 #include "topic.h"
 #include "connection.h"
+#include "json_utils.h"
 
 typedef struct {
   GtkWidget *fixed;
   GtkWidget *label;
   GtkWidget *entry_topic;
+  GtkWidget *entry_id;
   GtkWidget *dropdown_qos;
   GtkWidget *box_topics;
   GtkWidget *box_top;
@@ -28,8 +30,7 @@ typedef struct {
 
 void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack);
 void addNewTopic(GtkButton *button, gpointer user_data);
-static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
-static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+void entryIDChanged(GtkEntry *entry_id, gpointer user_data);
 void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data);
 void switchToConnection(GtkButton *button, gpointer user_data);
 

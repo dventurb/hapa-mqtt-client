@@ -2,7 +2,8 @@
 
 struct _STMQTTConnection {
   GObject parent_instance; 
-  char *id;
+  char *connection_id;
+  char *client_id;
   int port;
   char *name;
   char *protocol;
@@ -15,7 +16,8 @@ struct _STMQTTConnection {
 G_DEFINE_TYPE(STMQTTConnection, st_mqtt_connection, G_TYPE_OBJECT);
 
 static void st_mqtt_connection_init(STMQTTConnection *connection){
-  connection->id = NULL;
+  connection->connection_id = NULL;
+  connection->client_id = NULL;
   connection->port = 1883;
   connection->name = strdup("nova conexão");
   connection->protocol = strdup("mqtt");
@@ -35,8 +37,8 @@ static void st_mqtt_connection_dispose(GObject *object){
 
 static void st_mqtt_connection_finalize(GObject *object){
   STMQTTConnection *connection = ST_MQTT_Connection(object);
-  free(connection->id);
-  connection->id = NULL;
+  free(connection->connection_id);
+  connection->connection_id = NULL;
   free(connection->name);
   connection->name = NULL;
   free(connection->protocol);
@@ -74,9 +76,9 @@ const char *st_mqtt_connection_get_name(STMQTTConnection *self){
   }
 }
 
-const char *st_mqtt_connection_get_id(STMQTTConnection *self){
-  if(self->id){ 
-    return self->id;
+const char *st_mqtt_connection_get_connectionID(STMQTTConnection *self){
+  if(self->connection_id){ 
+    return self->connection_id;
   }else {
     return "";
   }
@@ -122,6 +124,14 @@ GListStore *st_mqtt_connection_get_topics(STMQTTConnection *self){
   return self->topics;
 }
 
+const char *st_mqtt_connection_get_clientID(STMQTTConnection *self){
+  if(self->client_id){ 
+    return self->client_id;
+  }else {
+    return "";
+  }
+}
+
 void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name){
   if(self->name){
     free(self->name);
@@ -129,11 +139,11 @@ void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name){
   self->name = strdup(name);
 }
 
-void st_mqtt_connection_set_id(STMQTTConnection *self, const char *id){
- if(self->id){
-   free(self->id);
+void st_mqtt_connection_set_connectionID(STMQTTConnection *self, const char *connection_id){
+ if(self->connection_id){
+   free(self->connection_id);
  }
-  self->id = strdup(id);
+  self->connection_id = strdup(connection_id);
 }
 
 void st_mqtt_connection_set_port(STMQTTConnection *self, int port){
@@ -173,3 +183,9 @@ void st_mqtt_connection_set_topics(STMQTTConnection *self, GListStore *store){
   self->topics = store;
 }
 
+void st_mqtt_connection_set_clientID(STMQTTConnection *self, const char *client_id){
+ if(self->client_id){
+   free(self->client_id);
+ }
+  self->client_id = strdup(client_id);
+}

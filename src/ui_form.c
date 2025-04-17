@@ -1,6 +1,9 @@
 #include "ui_form.h"
 #include "connection.h"
 
+static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+
 // FORM UI 
 void initFormUI(ST_FormUI *form_ui){
 
@@ -48,7 +51,6 @@ void initFormUI(ST_FormUI *form_ui){
   g_signal_connect(form_ui->connections_ui.selection_model, "selection-changed", G_CALLBACK(selectionChanged), form_ui);
 
  /* ---------------------------- END CONNECTION SECTION ---------------------------- */
- 
 
   // STACK - Two stack pages for connection simple data (CONNECTION SECTION) 
   // and other for connections topics and QOS (TOPICS SECTION).
@@ -88,9 +90,8 @@ void initFormUI(ST_FormUI *form_ui){
  
   // LIST STORE - The topics store, each connection have a different topics store,
   // so the topics store will start with current selected item from the connection list.
-  int  position = gtk_single_selection_get_selected(form_ui->connections_ui.selection_model);
+  int position = gtk_single_selection_get_selected(form_ui->connections_ui.selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connections_ui.connection_store), position);
-  g_print("Posicao: %d\n", position);
   form_ui->topics_ui.connection = connection;
   form_ui->topics_ui.topics_store = stMQTTConnectionGetTopics(connection);
   form_ui->topics_ui.no_selection = gtk_no_selection_new(G_LIST_MODEL(form_ui->topics_ui.topics_store));
@@ -135,7 +136,10 @@ void selectionChanged(GtkSelectionModel *selection_model, int position, int n_it
   buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->connections_ui.entry_username));
   gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetUsername(connection), -1);
 
-  // FIX: Set password buffer 
+  // FIX: Set password buffer
+
+  buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->topics_ui.entry_id));
+  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetClientID(connection), -1);
 }
 
 // SETUP - creates the visual structure of the item (initially). 
@@ -182,7 +186,7 @@ void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y
   ST_FormUI *form_ui = (ST_FormUI *)user_data;
   STMQTTConnection *connection = stMQTTConnectionNew();
   int position = g_list_model_get_n_items(G_LIST_MODEL(form_ui->connections_ui.connection_store)) - 1;
-  stMQTTConnectionSetID(connection, getID());
+  stMQTTConnectionSetConnectionID(connection, getID());
   addConnectionToJSON(connection);
   g_list_store_append(form_ui->connections_ui.connection_store, connection);
   gtk_single_selection_set_selected(form_ui->connections_ui.selection_model, position);

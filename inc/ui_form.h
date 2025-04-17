@@ -30,8 +30,6 @@ typedef struct _STMQTTConnection _STMQTTConnection;
 
 void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
 void initFormUI(ST_FormUI *form_ui);
-static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
-static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 
 

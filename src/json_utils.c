@@ -52,7 +52,9 @@ void addConnectionToJSON(STMQTTConnection *connection){
   json_object_object_add(new_json_connection, "username", json_object_new_string(username));
   const char *password = stMQTTConnectionGetPassword(connection); 
   json_object_object_add(new_json_connection, "password", json_object_new_string(password));
-  json_object_object_add(json_connections, stMQTTConnectionGetID(connection), new_json_connection);
+  const char *client_id = stMQTTConnectionGetClientID(connection);
+  json_object_object_add(new_json_connection, "client_id", json_object_new_string(client_id));
+  json_object_object_add(json_connections, stMQTTConnectionGetConnectionID(connection), new_json_connection);
 
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
@@ -89,7 +91,7 @@ void updateConnectionInJSON(STMQTTConnection *connection){
   free(data);
 
   struct json_object *json_connections = json_object_object_get(json, "ConnectionsSettings");
-  struct json_object *update_json_connection = json_object_object_get(json_connections, stMQTTConnectionGetID(connection));
+  struct json_object *update_json_connection = json_object_object_get(json_connections, stMQTTConnectionGetConnectionID(connection));
 
   const char *name = stMQTTConnectionGetName(connection);
   json_object_object_add(update_json_connection, "name", json_object_new_string(name));
@@ -102,6 +104,8 @@ void updateConnectionInJSON(STMQTTConnection *connection){
   json_object_object_add(update_json_connection, "username", json_object_new_string(username));
   const char *password = stMQTTConnectionGetPassword(connection);
   json_object_object_add(update_json_connection, "password", json_object_new_string(password));
+  const char *client_id = stMQTTConnectionGetClientID(connection);
+  json_object_object_add(update_json_connection, "client_id", json_object_new_string(client_id));
 
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
@@ -143,8 +147,8 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
   json_object_object_foreach(json_connections, key, val){
     STMQTTConnection *connection = stMQTTConnectionNew();
     g_list_store_append(connections_ui->connection_store, connection);
-    struct json_object *name, *port, *protocol, *host, *username, *password;
-    stMQTTConnectionSetID(connection, strdup(key));
+    struct json_object *name, *port, *protocol, *host, *username, *password, *client_id;
+    stMQTTConnectionSetConnectionID(connection, strdup(key));
     name = json_object_object_get(val, "name");
     if(name){
       stMQTTConnectionSetName(connection, json_object_get_string(name));
@@ -169,6 +173,10 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
     if(password){
       stMQTTConnectionSetPassword(connection, json_object_get_string(password));
    }
+   client_id = json_object_object_get(val, "client_id");
+    if(client_id){
+      stMQTTConnectionSetClientID(connection, json_object_get_string(client_id));
+    }
   }
   json_object_put(json);
 }
@@ -205,7 +213,7 @@ void deleteConnectionInJSON(STMQTTConnection *connection){
   free(data);
 
   struct json_object *json_connections = json_object_object_get(json, "ConnectionsSettings");
-  json_object_object_del(json_connections, stMQTTConnectionGetID(connection));
+  json_object_object_del(json_connections, stMQTTConnectionGetConnectionID(connection));
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
 }

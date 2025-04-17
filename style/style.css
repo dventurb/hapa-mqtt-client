@@ -537,3 +537,23 @@ border-bottom: 3px solid #0b5fb3;
   font-family: 'Arial';
   font-weight: Bold;
 }
+
+.topics_label_clientID {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #787878;
+}
+
+.topics_entry_clientID {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #0b5fb3;
+    box-shadow: none;
+    padding: 5px;
+}
+
+.topics_entry_clientID:hover {
+border-bottom: 3px solid #0b5fb3; 
+}
+
+
