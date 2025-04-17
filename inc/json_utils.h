@@ -17,5 +17,6 @@ void addConnectionToJSON(STMQTTConnection *connection);
 void updateConnectionInJSON(STMQTTConnection *connection);
 void loadJSONToForm(ST_ConnectionsUI *connections_ui);
 void deleteConnectionInJSON(STMQTTConnection *connection);
+void deleteTopicInJSON(STMQTTConnection *connection, int position);
 
 #endif

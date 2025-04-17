@@ -241,3 +241,44 @@ void deleteConnectionInJSON(STMQTTConnection *connection){
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
 }
+
+void deleteTopicInJSON(STMQTTConnection *connection, int position){
+  FILE *file = fopen(SETTINGS_JSON_PATH, "r");
+  if(!file){
+    return;
+  }
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
+
+  char *data = malloc(size + 1);
+  if(!data){
+    fclose(file);
+    return;
+  }
+  
+  size_t read = fread(data, 1, size, file);
+  if(read != size){
+    fclose(file);
+    free(data);
+    return;
+  }
+  fclose(file);
+  data[read] = '\0';
+
+  struct json_object *json = json_tokener_parse(data);
+  if(!json){
+    free(data);
+    return;
+  }
+  free(data);
+
+  struct json_object *json_connections = json_object_object_get(json, "ConnectionsSettings");
+  struct json_object *json_id = json_object_object_get(json_connections, stMQTTConnectionGetConnectionID(connection));
+  struct json_object *json_array;
+  json_object_object_get_ex(json_id, "subscriptions", &json_array);
+  //struct json_object *index = json_object_array_get_idx(json_array, position);
+  json_object_array_del_idx(json_array, position, 1);
+  json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
+  json_object_put(json);
+}

@@ -184,7 +184,7 @@ void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpo
   GtkWidget *image = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(gesture));
   GtkListItem *item = g_object_get_data(G_OBJECT(image), "list_item");
   int position = gtk_list_item_get_position(GTK_LIST_ITEM(item));
-
+  deleteTopicInJSON(topics_ui->connection, position);
   g_list_store_remove(topics_ui->topics_store, position);
 }
 

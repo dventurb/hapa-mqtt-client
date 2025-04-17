@@ -1,6 +1,6 @@
 {
   "ConnectionsSettings":{
-    "d35e9442-dfae-4485-9f9e-18dcd20d5279":{
+    "bdf2cc1b-7256-4b1e-a796-7b9aa137d68e":{
       "name":"nova conexão",
       "port":1883,
       "protocol":"mqtt",
@@ -10,8 +10,8 @@
       "client_id":"",
       "subscriptions":[
         {
-          "topic":"hapa\/rele",
-          "qos":"2"
+          "topic":"",
+          "qos":"0"
         }
       ]
     }
