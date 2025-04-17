@@ -10,16 +10,8 @@
       "client_id":"",
       "subscriptions":[
         {
-          "topic":"",
-          "qos":"0"
-        },
-        {
-          "topic":"",
-          "qos":"0"
-        },
-        {
-          "topic":"",
-          "qos":"0"
+          "topic":"hapa\/rele",
+          "qos":"2"
         }
       ]
     }

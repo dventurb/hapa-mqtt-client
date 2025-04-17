@@ -121,7 +121,7 @@ const char *st_mqtt_connection_get_password(STMQTTConnection *self){
 }
 
 GListStore *st_mqtt_connection_get_topics(STMQTTConnection *self){
-  return self->topics;
+    return self->topics;
 }
 
 const char *st_mqtt_connection_get_clientID(STMQTTConnection *self){

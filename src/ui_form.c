@@ -47,7 +47,7 @@ void initFormUI(ST_FormUI *form_ui){
 
   // SELECTION MODEL - Allows selecting a single connection from the list store.
   form_ui->connections_ui.selection_model = gtk_single_selection_new(G_LIST_MODEL(form_ui->connections_ui.connection_store));
-  loadJSONToForm(&form_ui->connections_ui);
+ 
   g_signal_connect(form_ui->connections_ui.selection_model, "selection-changed", G_CALLBACK(selectionChanged), form_ui);
 
  /* ---------------------------- END CONNECTION SECTION ---------------------------- */
@@ -86,7 +86,9 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_widget_set_vexpand(form_ui->scrolled, TRUE);
 
 
- /* ----------------------------- START TOPIC SECTION ----------------------------- */
+  loadJSONToForm(&form_ui->connections_ui);
+ 
+  /* ----------------------------- START TOPIC SECTION ----------------------------- */
  
   // LIST STORE - The topics store, each connection have a different topics store,
   // so the topics store will start with current selected item from the connection list.
@@ -98,6 +100,7 @@ void initFormUI(ST_FormUI *form_ui){
   gtk_list_view_set_model(GTK_LIST_VIEW(form_ui->topics_ui.list_view), GTK_SELECTION_MODEL(form_ui->topics_ui.no_selection));
 
   /* ----------------------------- END TOPIC SECTION ----------------------------- */
+
 }
 
 void selectionChanged(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){

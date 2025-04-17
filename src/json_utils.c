@@ -54,7 +54,7 @@ void addConnectionToJSON(STMQTTConnection *connection){
   json_object_object_add(new_json_connection, "password", json_object_new_string(password));
   const char *client_id = stMQTTConnectionGetClientID(connection);
   json_object_object_add(new_json_connection, "client_id", json_object_new_string(client_id));
-  int max_itens = g_list_model_get_n_items(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)));
+ int max_itens = g_list_model_get_n_items(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)));
   struct json_object *json_array = json_object_new_array();
   for(int i = 0; i < max_itens; i++){
     STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)), i);
@@ -157,8 +157,9 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
   json_object_object_foreach(json_connections, key, val){
     STMQTTConnection *connection = stMQTTConnectionNew();
     g_list_store_append(connections_ui->connection_store, connection);
-    struct json_object *name, *port, *protocol, *host, *username, *password, *client_id;
+    struct json_object *json_id, *name, *port, *protocol, *host, *username, *password, *client_id;
     stMQTTConnectionSetConnectionID(connection, strdup(key));
+    json_id = json_object_object_get(json_connections, key);
     name = json_object_object_get(val, "name");
     if(name){
       stMQTTConnectionSetName(connection, json_object_get_string(name));
@@ -186,6 +187,19 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
    client_id = json_object_object_get(val, "client_id");
     if(client_id){
       stMQTTConnectionSetClientID(connection, json_object_get_string(client_id));
+    }
+   struct json_object *json_array;
+   json_object_object_get_ex(json_id, "subscriptions", &json_array);
+   int array_length = json_object_array_length(json_array);
+   for(int i = 0; i < array_length; i++){
+      STMQTTTopic *topic = stMQTTTopicNew();
+      struct json_object *index = json_object_array_get_idx(json_array, i);
+      struct json_object *json_topic = json_object_object_get(index, "topic");
+      struct json_object *json_qos = json_object_object_get(index, "qos");
+      stMQTTTopicSetName(topic, json_object_get_string(json_topic));
+      stMQTTTopicSetQoS(topic, json_object_get_string(json_qos));
+      g_list_store_append(G_LIST_STORE(stMQTTConnectionGetTopics(connection)), topic);
+      g_object_unref(topic);
     }
   }
   json_object_put(json);
