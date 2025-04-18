@@ -188,6 +188,6 @@ void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y
   stMQTTConnectionSetConnectionID(connection, getID());
   addConnectionToJSON(connection);
   g_list_store_append(form_ui->connections_ui.connection_store, connection);
-  gtk_single_selection_set_selected(form_ui->connections_ui.selection_model, position);
+  gtk_single_selection_set_selected(form_ui->connections_ui.selection_model, position + 1);
 }
 
