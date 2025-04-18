@@ -54,7 +54,9 @@ void addConnectionToJSON(STMQTTConnection *connection){
   json_object_object_add(new_json_connection, "password", json_object_new_string(password));
   const char *client_id = stMQTTConnectionGetClientID(connection);
   json_object_object_add(new_json_connection, "client_id", json_object_new_string(client_id));
- int max_itens = g_list_model_get_n_items(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)));
+  json_object_object_add(new_json_connection, "certValidation", json_object_new_boolean(stMQTTConnectionGetCertValidation(connection)));
+  json_object_object_add(new_json_connection, "encryption", json_object_new_boolean(stMQTTConnectionGetEncryption(connection)));
+  int max_itens = g_list_model_get_n_items(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)));
   struct json_object *json_array = json_object_new_array();
   for(int i = 0; i < max_itens; i++){
     STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(stMQTTConnectionGetTopics(connection)), i);
@@ -116,6 +118,8 @@ void updateConnectionInJSON(STMQTTConnection *connection){
   json_object_object_add(update_json_connection, "password", json_object_new_string(password));
   const char *client_id = stMQTTConnectionGetClientID(connection);
   json_object_object_add(update_json_connection, "client_id", json_object_new_string(client_id));
+  json_object_object_add(update_json_connection, "certValidation", json_object_new_boolean(stMQTTConnectionGetCertValidation(connection)));
+  json_object_object_add(update_json_connection, "encryption", json_object_new_boolean(stMQTTConnectionGetEncryption(connection)));
   
   json_object_to_file_ext(SETTINGS_JSON_PATH, json, JSON_C_TO_STRING_PRETTY);
   json_object_put(json);
@@ -157,7 +161,7 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
   json_object_object_foreach(json_connections, key, val){
     STMQTTConnection *connection = stMQTTConnectionNew();
     g_list_store_append(connections_ui->connection_store, connection);
-    struct json_object *json_id, *name, *port, *protocol, *host, *username, *password, *client_id;
+    struct json_object *json_id, *name, *port, *protocol, *host, *username, *password, *client_id, *certValidation, *encryption;
     stMQTTConnectionSetConnectionID(connection, strdup(key));
     json_id = json_object_object_get(json_connections, key);
     name = json_object_object_get(val, "name");
@@ -187,6 +191,14 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
    client_id = json_object_object_get(val, "client_id");
     if(client_id){
       stMQTTConnectionSetClientID(connection, json_object_get_string(client_id));
+    }
+    certValidation = json_object_object_get(val, "certValidation");
+    if(certValidation){
+      stMQTTConnectionSetCertValidation(connection, json_object_get_boolean(certValidation));
+    }
+    encryption = json_object_object_get(val, "encryption");
+    if(encryption){
+      stMQTTConnectionSetEncryption(connection, json_object_get_boolean(encryption));
     }
    struct json_object *json_array;
    json_object_object_get_ex(json_id, "subscriptions", &json_array);

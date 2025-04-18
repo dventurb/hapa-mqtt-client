@@ -82,6 +82,8 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
 
   // SIGNALS (FORM SECTION)
   g_signal_connect(connections_ui->entry_name, "changed", G_CALLBACK(entryNameChanged), connections_ui);
+  g_signal_connect(connections_ui->switch_certificate, "notify::active", G_CALLBACK(switchCertificateChanged), connections_ui);
+  g_signal_connect(connections_ui->switch_encryption, "notify::active", G_CALLBACK(switchEncryptionChanged), connections_ui);
   g_signal_connect(connections_ui->entry_port, "changed", G_CALLBACK(entryPortChanged), connections_ui);
   g_signal_connect(connections_ui->dropdown_protocol, "notify::selected", G_CALLBACK(dropdownProtocolChanged), connections_ui);
   g_signal_connect(connections_ui->entry_host, "changed", G_CALLBACK(entryHostChanged), connections_ui);
@@ -123,7 +125,7 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   g_signal_connect(connections_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), connections_ui);
   g_signal_connect(connections_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), stack);
 
-  // NOTIFICATION
+  // TODO - NOTIFICATION
 
 }
 
@@ -135,6 +137,30 @@ void entryNameChanged(GtkEntry *entry_name, gpointer user_data){
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_name));
   const char *name = gtk_entry_buffer_get_text(buffer);
   stMQTTConnectionSetName(connection, name);
+
+  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
+  g_object_unref(connection);
+}
+
+void switchCertificateChanged(GObject *switchCertValidation, GParamSpec *pspec, gpointer user_data){
+  ST_ConnectionsUI *connections_ui = (ST_ConnectionsUI *)user_data;
+  int position = gtk_single_selection_get_selected(connections_ui->selection_model);
+  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
+
+  gboolean state = gtk_switch_get_active(GTK_SWITCH(connections_ui->switch_certificate));
+  stMQTTConnectionSetCertValidation(connection, state);
+
+  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
+  g_object_unref(connection);
+}
+
+void switchEncryptionChanged(GObject *switchEncryption, GParamSpec *pspec, gpointer user_data){
+  ST_ConnectionsUI *connections_ui = (ST_ConnectionsUI *)user_data;
+  int position = gtk_single_selection_get_selected(connections_ui->selection_model);
+  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
+
+  gboolean state = gtk_switch_get_active(GTK_SWITCH(connections_ui->switch_encryption));
+  stMQTTConnectionSetEncryption(connection, state);
 
   g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);

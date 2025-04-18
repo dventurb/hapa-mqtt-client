@@ -8,6 +8,8 @@
       "username":"",
       "password":"",
       "client_id":"",
+      "certValidation":true,
+      "encryption":true,
       "subscriptions":[
         {
           "topic":"",

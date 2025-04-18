@@ -29,6 +29,8 @@ typedef struct _ST_ConnectionsUI {
 
 void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack);
 void entryNameChanged(GtkEntry *entry_name, gpointer user_data);
+void switchCertificateChanged(GObject *switchCertValidation, GParamSpec *pspec, gpointer);
+void switchEncryptionChanged(GObject *switchEncryption, GParamSpec *pspec, gpointer user_data);
 void entryPortChanged(GtkEntry *entry_port, gpointer user_data);
 void dropdownProtocolChanged(GObject *object, GParamSpec *pspec, gpointer user_data);
 void entryHostChanged(GtkEntry *entry_host, gpointer user_data);

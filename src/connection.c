@@ -10,7 +10,7 @@ struct _STMQTTConnection {
   char *host;
   char *username;
   char *password;
-  gboolean certificate;
+  gboolean cert_validation;
   gboolean encryption;
   GListStore *topics;
 };
@@ -26,6 +26,8 @@ static void st_mqtt_connection_init(STMQTTConnection *connection){
   connection->host = NULL;
   connection->username = NULL;
   connection->password = NULL;
+  connection->cert_validation = FALSE;
+  connection->encryption = FALSE;
   connection->topics = g_list_store_new(ST_TYPE_MQTT_TOPIC);
 }
 
@@ -122,6 +124,14 @@ const char *st_mqtt_connection_get_password(STMQTTConnection *self){
   }
 }
 
+gboolean st_mqtt_connection_get_certValidation(STMQTTConnection *self){
+  return self->cert_validation;
+}
+
+gboolean st_mqtt_connection_get_encryption(STMQTTConnection *self){
+  return self->encryption;
+}
+
 GListStore *st_mqtt_connection_get_topics(STMQTTConnection *self){
     return self->topics;
 }
@@ -178,6 +188,14 @@ void st_mqtt_connection_set_password(STMQTTConnection *self, const char *passwor
     free(self->password);
   }
   self->password = strdup(password);
+}
+
+void st_mqtt_connection_set_certValidation(STMQTTConnection *self, gboolean cert_validation){
+  self->cert_validation = cert_validation;
+}
+
+void st_mqtt_connection_set_encryption(STMQTTConnection *self, gboolean encryption){
+  self->encryption = encryption;
 }
 
 void st_mqtt_connection_set_topics(STMQTTConnection *self, GListStore *store){

@@ -119,7 +119,10 @@ void selectionChanged(GtkSelectionModel *selection_model, int position, int n_it
   // Update Connection Form
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(form_ui->connections_ui.entry_name));
   gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetName(connection), -1);
- 
+
+  gtk_switch_set_active(GTK_SWITCH(form_ui->connections_ui.switch_certificate), stMQTTConnectionGetCertValidation(connection));
+  gtk_switch_set_active(GTK_SWITCH(form_ui->connections_ui.switch_encryption), stMQTTConnectionGetEncryption(connection));
+
   int length = snprintf(NULL, 0, "%d", stMQTTConnectionGetPort(connection));
   char *port = malloc(length + 1);
   sprintf(port, "%d", stMQTTConnectionGetPort(connection));
