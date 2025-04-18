@@ -87,6 +87,7 @@ void initFormUI(ST_FormUI *form_ui){
 
 
   loadJSONToForm(&form_ui->connections_ui);
+  selectionChanged(GTK_SELECTION_MODEL(form_ui->connections_ui.selection_model), 1, 1, form_ui);
  
   /* ----------------------------- START TOPIC SECTION ----------------------------- */
  
