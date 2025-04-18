@@ -248,14 +248,51 @@ void deleteConnection(GtkButton *button, gpointer user_data){
   int position = gtk_single_selection_get_selected(connections_ui->selection_model);
   if(n_items > 1){
     STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
+    if(position > 0){
+      selectedItemChanged(position - 1, connections_ui);
+    }else if(position == 0){
+      selectedItemChanged(position + 1, connections_ui);
+    }
     g_list_store_remove(connections_ui->connection_store, position);
     deleteConnectionInJSON(connection);
     stMQTTConnectionFree(connection);
-  }
+ }
 }
 
 void switchToTopics(GtkButton *button, gpointer user_data){
   GtkWidget *stack = (GtkWidget *)user_data;
 
   gtk_stack_set_visible_child_name(GTK_STACK(stack), "topics");
+}
+
+void selectedItemChanged(int position, ST_ConnectionsUI *connections_ui){
+  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
+
+  // Update Connection Form
+  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_name));
+  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetName(connection), -1);
+
+  gtk_switch_set_active(GTK_SWITCH(connections_ui->switch_certificate), stMQTTConnectionGetCertValidation(connection));
+  gtk_switch_set_active(GTK_SWITCH(connections_ui->switch_encryption), stMQTTConnectionGetEncryption(connection));
+
+  int length = snprintf(NULL, 0, "%d", stMQTTConnectionGetPort(connection));
+  char *port = malloc(length + 1);
+  sprintf(port, "%d", stMQTTConnectionGetPort(connection));
+  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_port));
+  gtk_entry_buffer_set_text(buffer, port, -1);
+  free(port);
+
+  if((strcmp(stMQTTConnectionGetProtocol(connection), "ws")) == 0){
+    gtk_drop_down_set_selected(GTK_DROP_DOWN(connections_ui->dropdown_protocol), 1);
+  }else {
+    gtk_drop_down_set_selected(GTK_DROP_DOWN(connections_ui->dropdown_protocol), 0);
+  }
+
+  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_host));
+  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetHost(connection) ,-1);
+
+  buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_username));
+  gtk_entry_buffer_set_text(buffer, stMQTTConnectionGetUsername(connection), -1);
+
+  // FIX: Set password buffer
 }

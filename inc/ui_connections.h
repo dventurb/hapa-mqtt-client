@@ -39,5 +39,6 @@ void entryPasswordChanged(GtkEntry *entry_password, gpointer user_data);
 void saveConnection(GtkButton *button, gpointer user_data);
 void deleteConnection(GtkButton *button, gpointer user_data);
 void switchToTopics(GtkButton *button, gpointer user_data);
+void selectedItemChanged(int position, ST_ConnectionsUI *connections_ui);
 
 #endif
