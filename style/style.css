@@ -172,6 +172,17 @@
 border-bottom: 3px solid #0b5fb3; 
 }
 
+.connections_label_certificate {
+  font-family: 'Arial';
+  font-size: 16px;
+}
+
+.connections_label_encryption {
+  font-family: 'Arial';
+  font-size: 16px;
+}
+
+
 .connections_label_port {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;

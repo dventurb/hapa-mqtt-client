@@ -12,6 +12,8 @@ typedef struct _ST_ConnectionsUI {
   GtkSingleSelection *selection_model;
   GtkWidget *fixed;
   GtkWidget *label;
+  GtkWidget *switch_certificate;
+  GtkWidget *switch_encryption;
   GtkWidget *entry_name;
   GtkWidget *entry_host;
   GtkWidget *entry_port;

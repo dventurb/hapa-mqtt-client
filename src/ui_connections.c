@@ -9,7 +9,7 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   gtk_widget_add_css_class(connections_ui->label, "connections_label_title");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 10, 30);
 
-// NAME 
+  // NAME 
   connections_ui->label = gtk_label_new("Nome");
   gtk_widget_add_css_class(connections_ui->label, "connections_label_name");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 30, 90);
@@ -17,7 +17,21 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   gtk_widget_set_size_request(connections_ui->entry_name, 300, -1);
   gtk_widget_add_css_class(connections_ui->entry_name, "connections_entry_name");
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->entry_name, 30, 110);
-  
+ 
+  // VALIDATE CERTIFICATE (SWITCH)
+  connections_ui->label = gtk_label_new("Validar certificado");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_certificate");
+  gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 400, 120);
+  connections_ui->switch_certificate = gtk_switch_new();
+  gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->switch_certificate, 440, 90);
+
+  // ENCRYPTION (SWITCH) 
+  connections_ui->label = gtk_label_new("Encriptação (tls)");
+  gtk_widget_add_css_class(connections_ui->label, "connections_label_encryption");
+  gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->label, 600, 120);
+  connections_ui->switch_encryption = gtk_switch_new();
+  gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->switch_encryption, 635, 90);
+
   // PORT 
   connections_ui->label = gtk_label_new("Porta");
   gtk_widget_add_css_class(connections_ui->label, "connections_label_port");

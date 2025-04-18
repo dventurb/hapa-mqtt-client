@@ -10,6 +10,8 @@ struct _STMQTTConnection {
   char *host;
   char *username;
   char *password;
+  gboolean certificate;
+  gboolean encryption;
   GListStore *topics;
 };
 
