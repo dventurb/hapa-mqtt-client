@@ -110,7 +110,6 @@ void selectionChanged(GtkSelectionModel *selection_model, int position, int n_it
   // to show the topics list of the selected connection.
   position = gtk_single_selection_get_selected(form_ui->connections_ui.selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connections_ui.connection_store), position);
- // g_print("\nPosição: %d\n", position); // For Debug
   form_ui->topics_ui.connection = connection;
   form_ui->topics_ui.topics_store = stMQTTConnectionGetTopics(connection);
   form_ui->topics_ui.no_selection = gtk_no_selection_new(G_LIST_MODEL(form_ui->topics_ui.topics_store));
@@ -150,7 +149,6 @@ void selectionChanged(GtkSelectionModel *selection_model, int position, int n_it
 
 // SETUP - creates the visual structure of the item (initially). 
 static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
-  //ST_FormUI *form_ui = (ST_FormUI *)user_data;
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   gtk_widget_add_css_class(box, "form_listitem");
 
@@ -173,19 +171,14 @@ static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointe
 
 // BIND - updates the item when it becomes visible on the screen.
 static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
-  //ST_FormUI *form_ui = (ST_FormUI *)user_data;
   STMQTTConnection *connection = gtk_list_item_get_item(item);
 
-  GtkWidget *label = g_object_get_data(G_OBJECT(item), "name");
-  gtk_label_set_max_width_chars(GTK_LABEL(label), 1);
-  gtk_label_set_text(GTK_LABEL(label), stMQTTConnectionGetName(connection));
-
-  label = g_object_get_data(G_OBJECT(item), "host");
-  gtk_label_set_max_width_chars(GTK_LABEL(label), 1);
-  // Example: mqtt + "://" + 192.168.1.1 + '\0' 
-  char *text = malloc(strlen(stMQTTConnectionGetProtocol(connection)) + strlen(stMQTTConnectionGetHost(connection)) + 4);
-  sprintf(text, "%s://%s", stMQTTConnectionGetProtocol(connection), stMQTTConnectionGetHost(connection));
-  gtk_label_set_text(GTK_LABEL(label), text);
+  GtkWidget *label_name = g_object_get_data(G_OBJECT(item), "name");
+  GtkWidget *label_host = g_object_get_data(G_OBJECT(item), "host");
+  
+  // Bind the property of the object to the label, keeping them sync. 
+  g_object_bind_property(connection, "name", label_name, "label", G_BINDING_SYNC_CREATE);
+  g_object_bind_property(connection, "host", label_host, "label", G_BINDING_SYNC_CREATE);
 }
 
 void addNewConnections(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){

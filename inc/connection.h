@@ -10,6 +10,7 @@
 #include <gio/gio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "topic.h"
 
 G_BEGIN_DECLS

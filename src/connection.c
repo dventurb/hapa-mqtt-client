@@ -1,3 +1,9 @@
+
+// I'm still learning GObject and that properties things, so maybe some things are wrong.
+// For more information and examples, see the following references:
+// https://discourse.gnome.org/t/how-to-force-a-refresh-of-widget-values-in-a-columnview/11335/7 
+// https://docs.gtk.org/gobject/class_method.Object.install_properties.html
+
 #include "connection.h"
 
 struct _STMQTTConnection {
@@ -15,7 +21,51 @@ struct _STMQTTConnection {
   GListStore *topics;
 };
 
+// Each value corresponds to a property of the object.
+enum {
+  PROP_F0, // By default 
+  PROP_NAME,
+  PROP_HOST,
+  N_PROPS  // Total properties
+};
+
+static GParamSpec *obj_properties[N_PROPS] = { NULL };
+
 G_DEFINE_TYPE(STMQTTConnection, st_mqtt_connection, G_TYPE_OBJECT);
+
+// To modify a property.
+static void st_mqtt_connection_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec){
+  STMQTTConnection *self = ST_MQTT_Connection(object);
+  switch (prop_id) {
+    case PROP_NAME:
+      stMQTTConnectionSetName(self, g_value_dup_string(value));
+      break;
+    case PROP_HOST:
+      stMQTTConnectionSetHost(self, g_value_dup_string(value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+  }
+}
+
+// To retrieve a value of the property.
+static void st_mqtt_connection_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec){
+  STMQTTConnection *self = ST_MQTT_Connection(object);
+  switch (prop_id) {
+    case PROP_NAME:
+      g_value_set_string(value, stMQTTConnectionGetName(self));
+      break;
+    case PROP_HOST:
+      // Example: mqtt + "://" + 192.168.1.1 + '\0';
+      char *text = malloc(strlen(stMQTTConnectionGetProtocol(self)) + strlen(stMQTTConnectionGetHost(self)) + 4);
+      sprintf(text, "%s://%s", stMQTTConnectionGetProtocol(self), stMQTTConnectionGetHost(self));
+      g_value_set_string(value, text);
+      free(text);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+  }
+}
 
 static void st_mqtt_connection_init(STMQTTConnection *connection){
   connection->connection_id = NULL;
@@ -62,6 +112,15 @@ static void st_mqtt_connection_class_init(STMQTTConnectionClass *klass){
   GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
   gobject_class->dispose = st_mqtt_connection_dispose;
   gobject_class->finalize = st_mqtt_connection_finalize;
+  gobject_class->set_property = st_mqtt_connection_set_property;
+  gobject_class->get_property = st_mqtt_connection_get_property;
+  
+  // Define each property with GParamSpec functions.
+  // name used in g_object_set/get, name-readable, description, default value and if the property is R+W. 
+  obj_properties[PROP_NAME] = g_param_spec_string("name", "Name", "Connection name", NULL, G_PARAM_READWRITE);
+  obj_properties[PROP_HOST] = g_param_spec_string("host", "Host", "Broker address", NULL, G_PARAM_READWRITE);
+
+  g_object_class_install_properties(gobject_class, N_PROPS, obj_properties);
 }
 
 STMQTTConnection *st_mqtt_connection_new(void){

@@ -121,7 +121,7 @@ void initConnectionsUI(ST_ConnectionsUI *connections_ui, GtkWidget *stack){
   gtk_fixed_put(GTK_FIXED(connections_ui->fixed), connections_ui->button_options.button, 190, 430);
 
   // SIGNALS (BUTTONS)
-  g_signal_connect(connections_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), connections_ui);
+ g_signal_connect(connections_ui->button_save.button, "clicked", G_CALLBACK(saveConnection), connections_ui);
   g_signal_connect(connections_ui->button_delete.button, "clicked", G_CALLBACK(deleteConnection), connections_ui);
   g_signal_connect(connections_ui->button_options.button, "clicked", G_CALLBACK(switchToTopics), stack);
 
@@ -137,8 +137,9 @@ void entryNameChanged(GtkEntry *entry_name, gpointer user_data){
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_name));
   const char *name = gtk_entry_buffer_get_text(buffer);
   stMQTTConnectionSetName(connection, name);
+  // Informs that the property has changed, so will automatically refresh the view.
+  g_object_notify(G_OBJECT(connection), "name");
 
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);
 }
 
@@ -150,7 +151,6 @@ void switchCertificateChanged(GObject *switchCertValidation, GParamSpec *pspec, 
   gboolean state = gtk_switch_get_active(GTK_SWITCH(connections_ui->switch_certificate));
   stMQTTConnectionSetCertValidation(connection, state);
 
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);
 }
 
@@ -162,7 +162,6 @@ void switchEncryptionChanged(GObject *switchEncryption, GParamSpec *pspec, gpoin
   gboolean state = gtk_switch_get_active(GTK_SWITCH(connections_ui->switch_encryption));
   stMQTTConnectionSetEncryption(connection, state);
 
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);
 }
 
@@ -176,7 +175,6 @@ void entryPortChanged(GtkEntry *entry_port, gpointer user_data){
   long int number = strtol(port, NULL, 10);
   stMQTTConnectionSetPort(connection, (int)number);
 
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);
 }
 
@@ -191,8 +189,7 @@ void dropdownProtocolChanged(GObject *object, GParamSpec *pspec, gpointer user_d
   }else if (item == 1){
     stMQTTConnectionSetProtocol(connection, "ws");
   }
-
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
+  g_object_notify(G_OBJECT(connection), "host");
   g_object_unref(connection);
 }
 
@@ -204,8 +201,7 @@ void entryHostChanged(GtkEntry *entry_host, gpointer user_data){
   GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(connections_ui->entry_host));
   const char *host = gtk_entry_buffer_get_text(buffer);
   stMQTTConnectionSetHost(connection, host);
-
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
+  g_object_notify(G_OBJECT(connection), "host");
   g_object_unref(connection);
 }
 
@@ -218,7 +214,6 @@ void entryUsernameChanged(GtkEntry *entry_username, gpointer user_data){
   const char *username = gtk_entry_buffer_get_text(buffer);
   stMQTTConnectionSetUsername(connection, username);
 
-  g_list_model_items_changed(G_LIST_MODEL(connections_ui->connection_store), position, 1, 1);
   g_object_unref(connection);
 }
 
@@ -240,6 +235,7 @@ void saveConnection(GtkButton *button, gpointer user_data){
   int position = gtk_single_selection_get_selected(connections_ui->selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
   updateConnectionInJSON(connection);
+  g_object_unref(connection);
 }
 
 void deleteConnection(GtkButton *button, gpointer user_data){
@@ -249,9 +245,9 @@ void deleteConnection(GtkButton *button, gpointer user_data){
   if(n_items > 1){
     STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
     if(position > 0){
-      selectedItemChanged(position - 1, connections_ui);
+      changeTheItemSelected(position - 1, connections_ui);
     }else if(position == 0){
-      selectedItemChanged(position + 1, connections_ui);
+      changeTheItemSelected(position + 1, connections_ui);
     }
     g_list_store_remove(connections_ui->connection_store, position);
     deleteConnectionInJSON(connection);
@@ -265,7 +261,7 @@ void switchToTopics(GtkButton *button, gpointer user_data){
   gtk_stack_set_visible_child_name(GTK_STACK(stack), "topics");
 }
 
-void selectedItemChanged(int position, ST_ConnectionsUI *connections_ui){
+void changeTheItemSelected(int position, ST_ConnectionsUI *connections_ui){
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(connections_ui->connection_store), position);
 
   // Update Connection Form

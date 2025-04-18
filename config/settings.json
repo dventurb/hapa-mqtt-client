@@ -1,6 +1,6 @@
 {
   "ConnectionsSettings":{
-    "48ddd1f2-9d2f-4bba-8f4d-74a432c62196":{
+    "6d2a0c36-dbbd-42e7-8eb7-704f3fdc2c14":{
       "name":"nova conexão",
       "port":1883,
       "protocol":"mqtt",
@@ -8,8 +8,8 @@
       "username":"",
       "password":"",
       "client_id":"",
-      "certValidation":true,
-      "encryption":true,
+      "certValidation":false,
+      "encryption":false,
       "subscriptions":[]
     }
   }
