@@ -8,7 +8,7 @@
       "username":"",
       "password":"",
       "client_id":"",
-      "certValidation":true,
+      "certValidation":false,
       "encryption":false,
       "subscriptions":[]
     }

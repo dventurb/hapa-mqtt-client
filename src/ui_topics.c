@@ -4,39 +4,45 @@ static void setupFactory(GtkListItemFactory *factory, GtkListItem *item, gpointe
 static void bindFactory(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 
 void initTopicsUI(ST_TopicsUI *topics_ui, GtkWidget *stack){
-  topics_ui->fixed = gtk_fixed_new();
+  topics_ui->stack = gtk_stack_new();
+  gtk_stack_set_transition_type(GTK_STACK(topics_ui->stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
 
+  /* --------------------------- TOPICS FORM SECTION --------------------------- */
+
+  topics_ui->fixed_form = gtk_fixed_new();  
+  gtk_stack_add_named(GTK_STACK(topics_ui->stack), topics_ui->fixed_form, "topics");
+  
   // TEXT 
   topics_ui->label = gtk_label_new("Conexão MQTT");
   gtk_widget_add_css_class(topics_ui->label, "topics_label_title");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->label, 10, 30);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->label, 10, 30);
 
   // TOPIC (NAME)
   topics_ui->label = gtk_label_new("Tópico");
   gtk_widget_add_css_class(topics_ui->label, "topics_label_topic");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->label, 30, 90);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->label, 30, 90);
   topics_ui->entry_topic = gtk_entry_new();
   gtk_widget_set_size_request(topics_ui->entry_topic, 400, -1);
   gtk_widget_add_css_class(topics_ui->entry_topic, "topics_entry_topic");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->entry_topic, 30, 110);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->entry_topic, 30, 110);
 
   // QoS (DROPDOWN)
   topics_ui->label = gtk_label_new("QoS");
   gtk_widget_add_css_class(topics_ui->label, "topics_label_qos");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->label, 460 ,90);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->label, 460 ,90);
   const char *strings[4] = {"0", "1", "2", NULL};
   topics_ui->dropdown_qos = gtk_drop_down_new_from_strings(strings);
   gtk_drop_down_set_show_arrow(GTK_DROP_DOWN(topics_ui->dropdown_qos), TRUE);
   gtk_widget_set_size_request(topics_ui->dropdown_qos, 100, -1);
   gtk_widget_add_css_class(topics_ui->dropdown_qos, "topics_dropdown_qos");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->dropdown_qos, 460, 110);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->dropdown_qos, 460, 110);
 
   // BUTTON (ADD)
   createButtonWithImageLabel(&topics_ui->button_add, TOPIC_ADD_PATH, "ADICIONAR");
   gtk_widget_add_css_class(topics_ui->button_add.button, "topics_button_add");
   gtk_widget_add_css_class(topics_ui->button_add.label, "topics_button_add_label");
   gtk_widget_set_size_request(topics_ui->button_add.button, 40, 35);
-gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 110);
+gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->button_add.button, 580, 110);
   g_signal_connect(topics_ui->button_add.button, "clicked", G_CALLBACK(addNewTopic), topics_ui);
 
   // FACTORY
@@ -75,33 +81,77 @@ gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_add.button, 580, 11
   gtk_box_append(GTK_BOX(topics_ui->box_topics), topics_ui->list_view);
   gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(topics_ui->scrolled), topics_ui->box_topics);
   gtk_widget_set_size_request(topics_ui->scrolled, 660, 260);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->scrolled, 30, 150);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->scrolled, 30, 150);
   
   // ID Connection 
   topics_ui->label = gtk_label_new("MQTT Cliente ID");
   gtk_widget_add_css_class(topics_ui->label, "topics_label_clientID");
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->label, 30, 415);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->label, 30, 415);
   topics_ui->entry_id = gtk_entry_new();
   gtk_widget_add_css_class(topics_ui->entry_id, "topics_entry_clientID");
   gtk_widget_set_size_request(topics_ui->entry_id, 310, -1);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->entry_id, 30, 430);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->entry_id, 30, 430);
 
   // BUTTON (BACK)
   createButtonWithImageLabel(&topics_ui->button_back, TOPIC_BACK_PATH, "VOLTAR");
   gtk_widget_add_css_class(topics_ui->button_back.button, "topics_button_back");
   gtk_widget_add_css_class(topics_ui->button_back.label, "topics_button_back_label");
   gtk_widget_set_size_request(topics_ui->button_back.button, 40, 35);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_back.button, 570, 430);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->button_back.button, 570, 430);
  
   // BUTTON (CERTIFICATES)
   createButtonWithImageLabel(&topics_ui->button_certificates, TOPIC_CERTIFICATES_PATH, "CERTIFICADOS");
   gtk_widget_add_css_class(topics_ui->button_certificates.button, "topics_button_certificates");
   gtk_widget_add_css_class(topics_ui->button_certificates.label, "topics_button_certificates_label");
   gtk_widget_set_size_request(topics_ui->button_certificates.button, 40, 35);
-  gtk_fixed_put(GTK_FIXED(topics_ui->fixed), topics_ui->button_certificates.button, 370, 430);
-  
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->button_certificates.button, 370, 430);
+ 
+  // SIGNALS
   g_signal_connect(topics_ui->entry_id, "changed", G_CALLBACK(entryIDChanged), topics_ui);
   g_signal_connect(topics_ui->button_back.button, "clicked", G_CALLBACK(switchToConnection), stack);
+  g_signal_connect(topics_ui->button_certificates.button, "clicked", G_CALLBACK(goToCertificates), topics_ui->stack);
+
+  
+ /* --------------------------- CERTIFICATES SECTION --------------------------- */
+
+  topics_ui->fixed_certificates = gtk_fixed_new();
+  gtk_stack_add_named(GTK_STACK(topics_ui->stack), topics_ui->fixed_certificates, "certificates");
+  
+  // TEXT 
+  topics_ui->label = gtk_label_new("Conexão MQTT");
+  gtk_widget_add_css_class(topics_ui->label, "topics_label_title");
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_certificates), topics_ui->label, 10, 30);
+ 
+  createButtonWithImageLabel(&topics_ui->button_server_certificate, TOPIC_CERTIFICATES_PATH, "CERTIFICADO DO SERVIDOR (CA)");
+  gtk_widget_add_css_class(topics_ui->button_server_certificate.button, "topics_button_server_certificate");
+  gtk_widget_add_css_class(topics_ui->button_server_certificate.label, "topics_button_server_certificate_label");
+  gtk_widget_set_size_request(topics_ui->button_server_certificate.button, 60, 40);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_certificates), topics_ui->button_server_certificate.button, 30, 90);
+
+  createButtonWithImageLabel(&topics_ui->button_client_certificate, TOPIC_CERTIFICATES_PATH, "CERTIFICADO DO CLIENTE");
+  gtk_widget_add_css_class(topics_ui->button_client_certificate.button, "topics_button_client_certificate");
+  gtk_widget_add_css_class(topics_ui->button_client_certificate.label, "topics_button_client_certificate_label");
+  gtk_widget_set_size_request(topics_ui->button_client_certificate.button, 50, 40);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_certificates), topics_ui->button_client_certificate.button, 30, 150);
+
+  createButtonWithImageLabel(&topics_ui->button_client_key, TOPIC_CERTIFICATES_PATH, "CHAVE DO CLIENTE");
+  gtk_widget_add_css_class(topics_ui->button_client_key.button, "topics_button_client_key");
+  gtk_widget_add_css_class(topics_ui->button_client_key.label, "topics_button_client_key_label");
+  gtk_widget_set_size_request(topics_ui->button_client_key.button, 40, 40);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_certificates), topics_ui->button_client_key.button, 30, 210);
+  
+  createButtonWithImageLabel(&topics_ui->button_certificates_back, TOPIC_BACK_PATH, "VOLTAR");
+  gtk_widget_add_css_class(topics_ui->button_certificates_back.button, "topics_button_certificates_back");
+  gtk_widget_add_css_class(topics_ui->button_certificates_back.label, "topics_button_certificates_back_label");
+  gtk_widget_set_size_request(topics_ui->button_certificates_back.button, 40, 40);
+  gtk_fixed_put(GTK_FIXED(topics_ui->fixed_certificates), topics_ui->button_certificates_back.button, 570, 430);
+
+  // SIGNALS 
+  g_signal_connect(topics_ui->button_certificates_back.button, "clicked", G_CALLBACK(goToTopics), topics_ui->stack);
+
+
+  // Set topics form visible
+  gtk_stack_set_visible_child_name(GTK_STACK(topics_ui->stack), "topics");
 }
 
 void addNewTopic(GtkButton *button, gpointer user_data){
@@ -192,4 +242,16 @@ void switchToConnection(GtkButton *button, gpointer user_data){
   GtkWidget *stack = (GtkWidget *)user_data;
 
   gtk_stack_set_visible_child_name(GTK_STACK(stack), "connections");
+}
+
+void goToCertificates(GtkButton *button, gpointer user_data){
+  GtkWidget *stack = (GtkWidget *)user_data;
+
+  gtk_stack_set_visible_child_name(GTK_STACK(stack), "certificates");
+}
+
+void goToTopics(GtkButton *button, gpointer user_data){
+  GtkWidget *stack = (GtkWidget *)user_data;
+  
+  gtk_stack_set_visible_child_name(GTK_STACK(stack), "topics");
 }

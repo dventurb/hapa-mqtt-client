@@ -64,7 +64,7 @@ void initFormUI(ST_FormUI *form_ui){
 
   // STACK - Topics Section
   initTopicsUI(&form_ui->topics_ui, form_ui->stack);
-  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->topics_ui.fixed, "topics");
+  gtk_stack_add_named(GTK_STACK(form_ui->stack), form_ui->topics_ui.stack, "topics");
  
   // STACK - Start in the Connections Page.
   gtk_stack_set_visible_child_name(GTK_STACK(form_ui->stack), "connections");

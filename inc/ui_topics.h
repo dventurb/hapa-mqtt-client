@@ -9,7 +9,9 @@
 #include "json_utils.h"
 
 typedef struct {
-  GtkWidget *fixed;
+  GtkWidget *stack;
+  GtkWidget *fixed_form;
+  GtkWidget *fixed_certificates;
   GtkWidget *label;
   GtkWidget *entry_topic;
   GtkWidget *entry_id;
@@ -26,6 +28,10 @@ typedef struct {
   ST_BUTTON button_back;
   ST_BUTTON button_certificates;
   ST_BUTTON button_delete;
+  ST_BUTTON button_server_certificate;
+  ST_BUTTON button_client_certificate;
+  ST_BUTTON button_client_key;
+  ST_BUTTON button_certificates_back;
   STMQTTConnection *connection;
 }ST_TopicsUI;
 
@@ -34,5 +40,7 @@ void addNewTopic(GtkButton *button, gpointer user_data);
 void entryIDChanged(GtkEntry *entry_id, gpointer user_data);
 void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpointer user_data);
 void switchToConnection(GtkButton *button, gpointer user_data);
+void goToCertificates(GtkButton *button, gpointer user_data);
+void goToTopics(GtkButton *button, gpointer user_data);
 
 #endif

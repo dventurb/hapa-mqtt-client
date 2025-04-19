@@ -576,3 +576,79 @@ border-bottom: 3px solid #0b5fb3;
 }
 
 
+.topics_button_server_certificate {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_server_certificate:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_server_certificate_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+
+.topics_button_client_certificate {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_client_certificate:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_client_certificate_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.topics_button_client_key {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_client_key:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_client_key_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+.topics_button_certificates_back {
+  border-radius: 0;
+  border: 0.9px solid #D0D0D0;
+  background-color: #F8F8F8;
+}
+
+.topics_button_certificates_back:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.02);
+}
+
+.topics_button_certificates_back_label {
+  color: #0b5fb3;
+  font-size: 1.1em;
+  font-family: 'Arial';
+  font-weight: Bold;
+}
+
+
+
+
