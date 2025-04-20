@@ -1,16 +1,25 @@
 {
   "ConnectionsSettings":{
-    "6d2a0c36-dbbd-42e7-8eb7-704f3fdc2c14":{
+    "66f99e73-cdb1-4158-954b-92f8d8470036":{
       "name":"nova conexão",
       "port":1883,
       "protocol":"mqtt",
-      "host":"192.168.1.1",
+      "host":"",
       "username":"",
       "password":"",
       "client_id":"",
       "certValidation":false,
       "encryption":false,
-      "subscriptions":[]
+      "subscriptions":[],
+      "serverCertificate":{
+        "data":""
+      },
+      "clientCertificate":{
+        "data":""
+      },
+      "clientKey":{
+        "data":""
+      }
     }
   }
 }
