@@ -16,6 +16,9 @@ struct _STMQTTConnection {
   char *host;
   char *username;
   char *password;
+  char *server_certificate;
+  char *client_certificate;
+  char *client_key;
   gboolean cert_validation;
   gboolean encryption;
   GListStore *topics;
@@ -78,6 +81,9 @@ static void st_mqtt_connection_init(STMQTTConnection *connection){
   connection->password = NULL;
   connection->cert_validation = FALSE;
   connection->encryption = FALSE;
+  connection->server_certificate = NULL;
+  connection->client_certificate = NULL;
+  connection->client_key = NULL;
   connection->topics = g_list_store_new(ST_TYPE_MQTT_TOPIC);
 }
 
@@ -103,6 +109,12 @@ static void st_mqtt_connection_finalize(GObject *object){
   connection->username = NULL;
   free(connection->password);
   connection->password = NULL;
+  free(connection->server_certificate);
+  connection->server_certificate = NULL;
+  free(connection->client_certificate);
+  connection->client_certificate = NULL;
+  free(connection->client_key);
+  connection->client_key = NULL;
   free(connection->topics);
   connection->topics = NULL;
   G_OBJECT_CLASS(st_mqtt_connection_parent_class)->finalize(object);
@@ -203,6 +215,30 @@ const char *st_mqtt_connection_get_clientID(STMQTTConnection *self){
   }
 }
 
+const char *st_mqtt_connection_get_server_certificate(STMQTTConnection *self){
+  if(self->server_certificate){
+    return self->server_certificate;
+  }else {
+    return "";
+  }
+}
+
+const char *st_mqtt_connection_get_client_certificate(STMQTTConnection *self){
+  if(self->client_certificate){
+    return self->client_certificate;
+  }else {
+    return "";
+  }
+}
+
+const char *st_mqtt_connection_get_client_key(STMQTTConnection *self){
+  if(self->client_key){
+    return self->client_key;
+  }else {
+    return "";
+  }
+}
+
 void st_mqtt_connection_set_name(STMQTTConnection *self, const char *name){
   if(self->name){
     free(self->name);
@@ -267,4 +303,25 @@ void st_mqtt_connection_set_clientID(STMQTTConnection *self, const char *client_
    free(self->client_id);
  }
   self->client_id = strdup(client_id);
+}
+
+void st_mqtt_connection_set_server_certificate(STMQTTConnection *self, const char *server_certificate){
+  if(self->server_certificate){
+    free(self->server_certificate);
+  }
+  self->server_certificate = strdup(server_certificate);
+}
+
+void st_mqtt_connection_set_client_certificate(STMQTTConnection *self, const char *client_certificate){
+  if(self->client_certificate){
+    free(self->client_certificate);
+  }
+  self->client_certificate = strdup(client_certificate);
+}
+
+void st_mqtt_connection_set_client_key(STMQTTConnection *self, const char *client_key){
+  if(self->client_key){
+    free(self->client_key);
+  }
+  self->client_key = strdup(client_key);
 }

@@ -148,7 +148,9 @@ gtk_fixed_put(GTK_FIXED(topics_ui->fixed_form), topics_ui->button_add.button, 58
 
   // SIGNALS 
   g_signal_connect(topics_ui->button_certificates_back.button, "clicked", G_CALLBACK(goToTopics), topics_ui->stack);
-
+  g_signal_connect(topics_ui->button_server_certificate.button, "clicked", G_CALLBACK(openFile), topics_ui);
+  g_signal_connect(topics_ui->button_client_certificate.button, "clicked", G_CALLBACK(openFile), topics_ui);
+  g_signal_connect(topics_ui->button_client_key.button, "clicked", G_CALLBACK(openFile), topics_ui);
 
   // Set topics form visible
   gtk_stack_set_visible_child_name(GTK_STACK(topics_ui->stack), "topics");
@@ -254,4 +256,134 @@ void goToTopics(GtkButton *button, gpointer user_data){
   GtkWidget *stack = (GtkWidget *)user_data;
   
   gtk_stack_set_visible_child_name(GTK_STACK(stack), "topics");
+}
+
+void openFile(GtkButton *button, gpointer user_data){
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  GtkFileDialog *dialog = gtk_file_dialog_new();
+  GtkWindow *parent_window = GTK_WINDOW(gtk_widget_get_root(topics_ui->stack));
+  if(button == GTK_BUTTON(topics_ui->button_server_certificate.button)){
+    gtk_file_dialog_open(dialog, parent_window, NULL, serverCertificateOpened, topics_ui);
+  }else if(button == GTK_BUTTON(topics_ui->button_client_certificate.button)){
+    gtk_file_dialog_open(dialog, parent_window, NULL, clientCertificateOpened, topics_ui);
+  }else if(button == GTK_BUTTON(topics_ui->button_client_key.button)){
+    gtk_file_dialog_open(dialog, parent_window, NULL, clientKeyOpened, topics_ui);
+  }
+}
+
+void serverCertificateOpened(GObject *source, GAsyncResult *res, gpointer user_data){
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  GtkFileDialog *dialog = GTK_FILE_DIALOG(source);
+  GFile *gfile = gtk_file_dialog_open_finish(dialog, res, NULL);
+  if(!gfile){
+    return;
+  }
+  char *path = g_file_get_path(gfile);
+  g_object_unref(gfile);
+
+  FILE *file = fopen(path, "rb");
+  if(!file){
+    g_free(path);
+    return;
+  }
+  g_free(path);
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
+
+  char *data = malloc(size +1);
+  if(!data){
+    fclose(file);
+    return;
+  }
+  size_t read = fread(data, 1, size, file);
+  if(read != size){
+    fclose(file);
+    free(data);
+    return;
+  }
+  fclose(file);
+  data[read] = '\0';
+  char *encoded = g_base64_encode((const guchar *)data, read);
+  free(data);
+  stMQTTConnectionSetServerCertificate(topics_ui->connection, encoded);
+  free(encoded);
+}
+
+void clientCertificateOpened(GObject *source, GAsyncResult *res, gpointer user_data){
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  GtkFileDialog *dialog = GTK_FILE_DIALOG(source);
+  GFile *gfile = gtk_file_dialog_open_finish(dialog, res, NULL);
+  if(!gfile){
+    return;
+  }
+  char *path = g_file_get_path(gfile);
+  g_object_unref(gfile);
+
+  FILE *file = fopen(path, "rb");
+  if(!file){
+    g_free(path);
+    return;
+  }
+  g_free(path);
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
+
+  char *data = malloc(size + 1);
+  if(!data){
+    fclose(file);
+    return;
+  }
+  size_t read = fread(data, 1, size, file);
+  if(read != size){
+    fclose(file);
+    free(data);
+    return;
+  }
+  fclose(file);
+  data[read] = '\0';
+  char *encoded = g_base64_encode((const guchar *)data, read);
+  free(data);
+  stMQTTConnectionSetClientCertificate(topics_ui->connection, encoded);
+  free(encoded);
+}
+
+void clientKeyOpened(GObject *source, GAsyncResult *res, gpointer user_data){
+  ST_TopicsUI *topics_ui = (ST_TopicsUI *)user_data;
+  GtkFileDialog *dialog = GTK_FILE_DIALOG(source);
+  GFile *gfile = gtk_file_dialog_open_finish(dialog, res, NULL);
+  if(!gfile){
+    return;
+  }
+  char *path = g_file_get_path(gfile);
+  g_object_unref(gfile);
+
+  FILE *file = fopen(path, "rb");
+  if(!file){
+    g_free(path);
+    return;
+  }
+  g_free(path);
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
+
+  char *data = malloc(size + 1);
+  if(!data){
+    fclose(file);
+    return;
+  }
+  size_t read = fread(data, 1, size, file);
+  if(read != size){
+    fclose(file);
+    free(data);
+    return;
+  }
+  fclose(file);
+  data[read] = '\0';
+  char *encoded = g_base64_encode((const guchar *)data, read);
+  free(data);
+  stMQTTConnectionSetClientKey(topics_ui->connection, encoded);
+  free(encoded);
 }

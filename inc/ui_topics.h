@@ -42,5 +42,9 @@ void deleteTopic(GtkGestureClick *gesture, int n_press, double  x, double y, gpo
 void switchToConnection(GtkButton *button, gpointer user_data);
 void goToCertificates(GtkButton *button, gpointer user_data);
 void goToTopics(GtkButton *button, gpointer user_data);
+void openFile(GtkButton *button, gpointer user_data);
+void serverCertificateOpened(GObject *source, GAsyncResult *res, gpointer user_data);
+void clientCertificateOpened(GObject *source, GAsyncResult *res, gpointer user_data);
+void clientKeyOpened(GObject *source, GAsyncResult *res, gpointer user_data);
 
 #endif
