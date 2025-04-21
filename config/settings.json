@@ -1,16 +1,21 @@
 {
   "ConnectionsSettings":{
     "66f99e73-cdb1-4158-954b-92f8d8470036":{
-      "name":"nova conexão",
+      "name":"ESP32",
       "port":1883,
       "protocol":"mqtt",
-      "host":"",
-      "username":"",
-      "password":"",
+      "host":"192.168.1.159",
+      "username":"192.168.1.159",
+      "password":"pass",
       "client_id":"",
-      "certValidation":false,
+      "certValidation":true,
       "encryption":false,
-      "subscriptions":[],
+      "subscriptions":[
+        {
+          "topic":"room\/tv",
+          "qos":"2"
+        }
+      ],
       "serverCertificate":{
         "data":""
       },
