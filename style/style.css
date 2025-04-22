@@ -88,6 +88,106 @@
   background: white;
 }
 
+.home_box_connections {
+  padding: 8px;
+  border-right: 2px solid #F0F0F0;
+}
+
+.home_label_connections {
+  color: black;
+  font-size: 1.2em;
+  font-family: 'Roboto', sans-serif;
+}
+
+.home_listitem_connection {
+  background-color: #FFFFFF;
+  padding: 8px;
+  margin: 2px 0;
+  transition: background 0.2s;
+}
+
+.home_listitem_connection:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.01);
+}
+
+.home_listitem_connection_label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  color: #4F4F4F;
+  margin-left: 8px;
+}
+
+.home_box_right_top {
+  border-bottom: 2px solid #F0F0F0;
+}
+
+.home_box_right_top_label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2em;
+}
+
+.home_listitem_topic {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #3498db;
+}
+
+.home_listitem_topic_label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.home_textview {
+  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #AFAFAF;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.5px;
+}
+
+.home_entry_payload{
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-family: "Courier New", monospace;
+}
+
+.home_scrolled_entry {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.home_entry_payload:hover {
+  background-color: #f1f9ff;
+  border: none;
+  box-shadow: none;
+}
+
+.home_image_send {
+  margin-right: 10px;
+  transition: opacity 150ms ease;
+  opacity: 0.9;
+}
+
+.home_image_send:hover {
+  opacity: 1.0;
+  transform: scale(1.1);
+}
+
 
 /* ------------------------------ FORM STYLE ------------------------------ */
 
@@ -116,7 +216,7 @@
   background-color: #F5F5F5;
   padding: 8px;
   margin: 2px 0;
-  transition: backgroud 0.2s;
+  transition: background 0.2s;
 }
 
 .form_listitem:hover {

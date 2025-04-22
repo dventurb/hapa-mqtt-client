@@ -6,6 +6,8 @@
 #include "ui_home.h"
 #include "ui_form.h"
 #include "paths.h"
+#include "connection.h"
+#include "topic.h"
 
 typedef struct {
   GtkWidget *window;
@@ -20,5 +22,6 @@ void createApplication(GtkApplication *app, gpointer user_data);
 void initAppWidgets(ST_AppWidgets *app_ui, GtkApplication *app);
 void switchToForm(GtkButton *button, gpointer user_data);
 void switchToHome(GtkButton *button, gpointer user_data);
+void selectionConnection(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
 
 #endif 

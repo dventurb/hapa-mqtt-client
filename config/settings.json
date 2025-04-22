@@ -1,19 +1,49 @@
 {
   "ConnectionsSettings":{
-    "66f99e73-cdb1-4158-954b-92f8d8470036":{
+    "8e6c1351-b83f-41aa-8038-be216a533970":{
       "name":"ESP32",
       "port":1883,
       "protocol":"mqtt",
-      "host":"192.168.1.159",
-      "username":"192.168.1.159",
-      "password":"pass",
+      "host":"",
+      "username":"",
+      "password":"",
       "client_id":"",
-      "certValidation":true,
+      "certValidation":false,
       "encryption":false,
       "subscriptions":[
         {
-          "topic":"room\/tv",
+          "topic":"hapa\/rele",
           "qos":"2"
+        },
+        {
+          "topic":"room\/tv",
+          "qos":"0"
+        }
+      ],
+      "serverCertificate":{
+        "data":""
+      },
+      "clientCertificate":{
+        "data":""
+      },
+      "clientKey":{
+        "data":""
+      }
+    },
+    "5e4f5534-d9f2-402e-b574-b31b10d3032a":{
+      "name":"nova conexão",
+      "port":1883,
+      "protocol":"mqtt",
+      "host":"",
+      "username":"",
+      "password":"",
+      "client_id":"",
+      "certValidation":false,
+      "encryption":false,
+      "subscriptions":[
+        {
+          "topic":"room\/rrr",
+          "qos":"1"
         }
       ],
       "serverCertificate":{

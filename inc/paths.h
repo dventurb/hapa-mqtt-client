@@ -22,5 +22,10 @@
 #define TOPIC_BACK_PATH "icons/actions/topic-back.png"
 #define TOPIC_CERTIFICATES_PATH "icons/actions/topic-certificates.png"
 
+#define SEND_PAYLOAD_PATH "icons/actions/send-payload.png"
+
+#define START_CONNECTION_PATH "icons/status/start.png"
+#define STOP_CONNECTION_PATH "icons/status/stop.png"
+
 #endif 
 

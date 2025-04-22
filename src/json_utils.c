@@ -3,7 +3,8 @@
 
 #include "json_utils.h"
 #include "ui_connections.h"
- 
+#include "ui_home.h"
+
 void addConnectionToJSON(STMQTTConnection *connection){
   FILE *file = fopen(SETTINGS_JSON_PATH, "r");
   if(!file){
@@ -182,6 +183,112 @@ void loadJSONToForm(ST_ConnectionsUI *connections_ui){
   json_object_object_foreach(json_connections, key, val){
     STMQTTConnection *connection = stMQTTConnectionNew();
     g_list_store_append(connections_ui->connection_store, connection);
+    struct json_object *json_id, *name, *port, *protocol, *host, *username, *password, *client_id, *certValidation, *encryption, *data;
+    stMQTTConnectionSetConnectionID(connection, strdup(key));
+    json_id = json_object_object_get(json_connections, key);
+    name = json_object_object_get(val, "name");
+    if(name){
+      stMQTTConnectionSetName(connection, json_object_get_string(name));
+    }
+    port = json_object_object_get(val, "port");
+    if(port){
+      stMQTTConnectionSetPort(connection, json_object_get_int(port));
+    }
+    protocol = json_object_object_get(val, "protocol");
+    if(protocol){
+      stMQTTConnectionSetProtocol(connection, json_object_get_string(protocol));
+    }
+    host = json_object_object_get(val, "host");
+    if(host){
+      stMQTTConnectionSetHost(connection, json_object_get_string(host));
+    }
+    username = json_object_object_get(val, "username");
+    if(username){
+      stMQTTConnectionSetUsername(connection, json_object_get_string(username));
+    }
+    password = json_object_object_get(val, "password");
+    if(password){
+      stMQTTConnectionSetPassword(connection, json_object_get_string(password));
+    }
+    client_id = json_object_object_get(val, "client_id");
+    if(client_id){
+      stMQTTConnectionSetClientID(connection, json_object_get_string(client_id));
+    }
+    certValidation = json_object_object_get(val, "certValidation");
+    if(certValidation){
+      stMQTTConnectionSetCertValidation(connection, json_object_get_boolean(certValidation));
+    }
+    encryption = json_object_object_get(val, "encryption");
+    if(encryption){
+      stMQTTConnectionSetEncryption(connection, json_object_get_boolean(encryption));
+    }
+    struct json_object *json_array;
+    json_object_object_get_ex(json_id, "subscriptions", &json_array);
+    int array_length = json_object_array_length(json_array);
+    for(int i = 0; i < array_length; i++){
+      STMQTTTopic *topic = stMQTTTopicNew();
+      struct json_object *index = json_object_array_get_idx(json_array, i);
+      struct json_object *json_topic = json_object_object_get(index, "topic");
+      struct json_object *json_qos = json_object_object_get(index, "qos");
+      stMQTTTopicSetName(topic, json_object_get_string(json_topic));
+      stMQTTTopicSetQoS(topic, json_object_get_string(json_qos));
+      g_list_store_append(G_LIST_STORE(stMQTTConnectionGetTopics(connection)), topic);
+      g_object_unref(topic);
+    }
+    struct json_object *server_certificate = json_object_object_get(val, "serverCertificate");
+    data = json_object_object_get(server_certificate, "data");
+    if(data){
+       stMQTTConnectionSetServerCertificate(connection, json_object_get_string(data));
+    }
+    struct json_object *client_certificate = json_object_object_get(val, "clientCertificate");
+    data = json_object_object_get(client_certificate, "data");
+    if(data){
+      stMQTTConnectionSetClientCertificate(connection, json_object_get_string(data));
+    }
+    struct json_object *client_key = json_object_object_get(val, "clientKey");
+    data = json_object_object_get(client_key, "data");
+    if(data){
+       stMQTTConnectionSetClientKey(connection, json_object_get_string(data));
+    }
+  }
+  json_object_put(json);
+}
+
+void loadJSONToHome(ST_HomeUI *home_ui){
+  FILE *file = fopen(SETTINGS_JSON_PATH, "r");
+  if(!file){
+    return;
+  }
+  
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
+
+  char *data = malloc(size + 1);
+  if(!data){
+    fclose(file);
+    return;
+  }
+  size_t read = fread(data, 1, size, file);
+  if(read != size){
+    fclose(file);
+    free(data);
+    return;
+  }
+  fclose(file);
+  data[read] = '\0';
+
+  struct json_object *json = json_tokener_parse(data);
+  if(!json){
+    free(data);
+    return;
+  }
+  free(data);
+  struct json_object *json_connections = json_object_object_get(json, "ConnectionsSettings");
+    
+  json_object_object_foreach(json_connections, key, val){
+    STMQTTConnection *connection = stMQTTConnectionNew();
+    g_list_store_append(home_ui->connection_store, connection);
     struct json_object *json_id, *name, *port, *protocol, *host, *username, *password, *client_id, *certValidation, *encryption, *data;
     stMQTTConnectionSetConnectionID(connection, strdup(key));
     json_id = json_object_object_get(json_connections, key);
