@@ -57,10 +57,15 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_add_css_class(box_right_top, "home_box_right_top");
   gtk_box_append(GTK_BOX(box_right), box_right_top);
 
-  home_ui->label_top = gtk_label_new("");
-  gtk_widget_add_css_class(home_ui->label_top, "home_box_right_top_label");
-  gtk_box_append(GTK_BOX(box_right_top), home_ui->label_top);
-  gtk_widget_set_margin_start(home_ui->label_top, 10);
+  home_ui->label_top_name = gtk_label_new("");
+  gtk_widget_add_css_class(home_ui->label_top_name, "home_box_right_top_name");
+  gtk_box_append(GTK_BOX(box_right_top), home_ui->label_top_name);
+  gtk_widget_set_margin_start(home_ui->label_top_name, 10);
+
+  home_ui->label_top_host = gtk_label_new("");
+  gtk_widget_add_css_class(home_ui->label_top_host, "home_box_right_top_host");
+  gtk_box_append(GTK_BOX(box_right_top), home_ui->label_top_host);
+  gtk_widget_set_margin_start(home_ui->label_top_host, 5);
 
   GtkWidget *box_right_bottom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_box_append(GTK_BOX(box_right), box_right_bottom);
@@ -85,29 +90,31 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_set_vexpand(home_ui->scrolled_topic, TRUE);
   gtk_box_append(GTK_BOX(home_ui->box_topics), home_ui->scrolled_topic);
 
-  GtkWidget *box_payload = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
-  gtk_box_append(GTK_BOX(box_right_bottom), box_payload);
+  GtkWidget *box_right_bottom_bottom = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  gtk_box_append(GTK_BOX(box_right_bottom), box_right_bottom_bottom);
 
-  home_ui->text_view = gtk_text_view_new();
-  gtk_text_view_set_editable(GTK_TEXT_VIEW(home_ui->text_view), FALSE);
-  gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(home_ui->text_view), GTK_WRAP_WORD_CHAR);
-  gtk_widget_add_css_class(home_ui->text_view, "home_textview");
+  home_ui->message_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  gtk_widget_add_css_class(home_ui->message_box, "home_message_box");
 
-  home_ui->scrolled_payload = gtk_scrolled_window_new();
-  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_payload), home_ui->text_view);
-  gtk_widget_set_hexpand(home_ui->scrolled_payload, TRUE);
-  gtk_widget_set_vexpand(home_ui->scrolled_payload, TRUE);
-  gtk_widget_add_css_class(home_ui->scrolled_payload, "home_scrolled_payload");
-  gtk_box_append(GTK_BOX(box_payload), home_ui->scrolled_payload);
-
+  home_ui->scrolled_message = gtk_scrolled_window_new();
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), home_ui->message_box);
+  gtk_widget_set_hexpand(home_ui->scrolled_message, TRUE);
+  gtk_widget_set_size_request(home_ui->scrolled_message, -1, 380);
+  gtk_widget_add_css_class(home_ui->scrolled_message, "home_scrolled_message");
+  gtk_box_append(GTK_BOX(box_right_bottom_bottom), home_ui->scrolled_message);
+  
+  GtkWidget *box_payload = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+  gtk_box_append(GTK_BOX(box_right_bottom_bottom), box_payload);
   home_ui->entry_payload = gtk_text_view_new();
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(home_ui->entry_payload));
   gtk_text_buffer_set_text(buffer, "Hello", -1);
   gtk_widget_add_css_class(home_ui->entry_payload, "home_entry_payload");
-  home_ui->scrolled_payload = gtk_scrolled_window_new();
-  gtk_widget_add_css_class(home_ui->scrolled_payload, "home_scrolled_entry");
-  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_payload), home_ui->entry_payload);
-  gtk_box_append(GTK_BOX(box_payload), home_ui->scrolled_payload);
+  home_ui->scrolled_message = gtk_scrolled_window_new();
+  gtk_widget_set_hexpand(home_ui->scrolled_message, TRUE);
+  gtk_widget_set_vexpand(home_ui->scrolled_message, TRUE);
+  gtk_widget_add_css_class(home_ui->scrolled_message, "home_scrolled_entry");
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), home_ui->entry_payload);
+  gtk_box_append(GTK_BOX(box_payload), home_ui->scrolled_message);
 
   home_ui->image = gtk_image_new_from_file(SEND_PAYLOAD_PATH);
   gtk_widget_set_size_request(home_ui->image, 35, 35);
@@ -172,12 +179,18 @@ static void bindFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpo
 
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
   ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
-
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(home_ui->entry_payload));
   GtkTextIter start, end;
-  gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+  gtk_text_buffer_get_start_iter(buffer, &start);
+  gtk_text_buffer_get_end_iter(buffer, &end);
   
   char *payload = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-  
+  struct mosquitto *mosq = connectMQTT(home_ui, home_ui->connection, home_ui->topic);
+  if(!mosq){
+    return;
+  }
+  publishMQTT(mosq, home_ui->topic, home_ui, payload);
+
+  //disconnectMQTT(mosq);
   free(payload);
 }

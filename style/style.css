@@ -122,9 +122,15 @@
   border-bottom: 2px solid #F0F0F0;
 }
 
-.home_box_right_top_label {
+.home_box_right_top_name {
   font-family: 'Roboto', sans-serif;
   font-size: 1.2em;
+}
+
+.home_box_right_top_host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+  color: #787878;
 }
 
 .home_listitem_topic {
@@ -137,6 +143,13 @@
   border-left: 4px solid #3498db;
 }
 
+.home_listitem_topic:selected {
+  background-color: #e3f2fd;
+  border-left: 4px solid #1e88e5;
+  color: #000000;
+  transition: all 0.2ms ease;
+}
+
 .home_listitem_topic_label {
   font-family: 'Roboto Mono', monospace;
   font-size: 14px;
@@ -145,7 +158,7 @@
   margin-bottom: 4px;
 }
 
-.home_textview {
+.home_message_box {
   border-left: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   background-color: #AFAFAF;
@@ -171,10 +184,10 @@
   box-shadow: none;
 }
 
-.home_entry_payload:hover {
-  background-color: #f1f9ff;
+.home_entry_payload {
   border: none;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .home_image_send {
@@ -188,6 +201,68 @@
   transform: scale(1.1);
 }
 
+.home_scrolled_message {
+  background: #FFFFFF;
+  border-radius: 0;
+  border: none;
+  border-bottom: none;
+  padding: 10px;
+}
+
+.home_message_box {
+  padding: 10px;
+  background-color: #FEFEFE;
+  border-radius: 0;
+  border: none;
+  border-bottom: 2px solid #F0F0F0;
+  border-left: 2px solid #F0F0F0; 
+}
+
+.message_topic_sent {
+  color: #FEFEFE;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.message_topic_received {
+  color: #333;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.message_received {
+  background-color: #F5F5F5;
+  padding: 10px;
+  border-radius: 10px;
+  color: #222;
+  font-family: monospace;
+  border-left: 4px solid #3498db;
+}
+
+.message_payload_sent {
+  color:#FFF;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.message_payload_received {
+  color: #111;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.message_date {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.message_sent {
+  background-color: #3498db;
+  padding: 15px;
+  border-radius: 10px;
+  opacity: 0.60;
+}
 
 /* ------------------------------ FORM STYLE ------------------------------ */
 

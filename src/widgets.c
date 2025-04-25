@@ -1,4 +1,5 @@
 #include "widgets.h"
+#include "ui_home.h"
 
 // Create a custom button with a image and text 
 void createButtonWithImageLabel(ST_BUTTON *button, const char *pathToImage, const char *textButton){
@@ -12,4 +13,75 @@ void createButtonWithImageLabel(ST_BUTTON *button, const char *pathToImage, cons
   button->label = gtk_label_new(textButton);
   gtk_box_append(GTK_BOX(button->box), button->label);
   gtk_box_append(GTK_BOX(button->box), button->image);
+}
+
+void sendMessage(STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload){
+  GtkWidget *box_in = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
+  GtkWidget *box_out = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+  GtkWidget *label = gtk_label_new(NULL);
+
+  char *header = malloc(strlen(stMQTTTopicGetName(topic)) + 7);
+  sprintf(header, "Tópico: %s", stMQTTTopicGetName(topic));
+  gtk_label_set_text(GTK_LABEL(label), header);
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_widget_add_css_class(label, "message_topic_sent");
+  gtk_box_append(GTK_BOX(box_in), label);
+
+  label = gtk_label_new(payload);
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_wrap(GTK_LABEL(label), true);
+  gtk_widget_add_css_class(label, "message_payload_sent");
+  gtk_box_append(GTK_BOX(box_in), label);
+
+  gtk_widget_add_css_class(box_in, "message_sent");
+  gtk_box_append(GTK_BOX(box_out), box_in);
+  
+  
+  char *date = strdup(getDateTime());
+  label = gtk_label_new(date);
+  gtk_label_set_xalign(GTK_LABEL(label), 1.0);
+  gtk_widget_add_css_class(label, "message_date");
+  gtk_box_append(GTK_BOX(box_out), label);
+  
+  gtk_widget_set_halign(box_out, GTK_ALIGN_END);
+  gtk_widget_set_margin_start(box_out, 20);
+  gtk_widget_set_margin_end(box_out, 20);
+
+  gtk_box_append(GTK_BOX(home_ui->message_box), box_out);
+
+  free(header);
+}
+
+void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
+  GtkWidget *box_in = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
+  GtkWidget *box_out = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+  GtkWidget *label = gtk_label_new(NULL);
+
+  char *header = malloc(strlen(topic) + 7);
+  sprintf(header, "Tópico: %s", topic);
+  gtk_label_set_text(GTK_LABEL(label), header);
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_widget_add_css_class(label, "message_topic_received");
+  gtk_box_append(GTK_BOX(box_in), label);
+
+  label = gtk_label_new(payload);
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_widget_add_css_class(label, "message_payload_received");
+  gtk_box_append(GTK_BOX(box_in), label);
+
+  gtk_widget_add_css_class(box_in, "message_received");
+  gtk_box_append(GTK_BOX(box_out), box_in);
+
+  char *date = strdup(getDateTime());
+  label = gtk_label_new(date);
+  gtk_label_set_xalign(GTK_LABEL(label), 1.0);
+  gtk_widget_add_css_class(label, "message_date");
+  gtk_box_append(GTK_BOX(box_out), label);
+
+  gtk_widget_set_halign(box_out, GTK_ALIGN_START);
+  gtk_widget_set_margin_start(box_out, 20);
+  gtk_widget_set_margin_end(box_out, 20);
+  gtk_box_append(GTK_BOX(home_ui->message_box), box_out);
+
+  free(header);
 }

@@ -53,6 +53,7 @@ void initAppWidgets(ST_AppWidgets *app_ui, GtkApplication *app){
   gtk_stack_set_visible_child_name(GTK_STACK(app_ui->stack), "homepage");
   
   selectionConnection(GTK_SELECTION_MODEL(app_ui->home_ui.selection_connection), 1, 1, &app_ui->home_ui);
+  selectionTopic(GTK_SELECTION_MODEL(app_ui->home_ui.selection_topic), 1, 1, &app_ui->home_ui);
 }
 
 void switchToForm(GtkButton *button, gpointer user_data){
@@ -80,7 +81,21 @@ void switchToHome(GtkButton *button, gpointer user_data){
   
   app_ui->home_ui.selection_connection = gtk_single_selection_new(G_LIST_MODEL(app_ui->home_ui.connection_store));
   gtk_list_view_set_model(GTK_LIST_VIEW(app_ui->home_ui.list_view_connection), GTK_SELECTION_MODEL(app_ui->home_ui.selection_connection));
+  int position = gtk_single_selection_get_selected(app_ui->home_ui.selection_connection);
+  STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(app_ui->home_ui.connection_store), position);
+  app_ui->home_ui.connection = connection;
+
   g_signal_connect(app_ui->home_ui.selection_connection, "selection-changed", G_CALLBACK(selectionConnection), &app_ui->home_ui);
+ 
+
+  app_ui->home_ui.topics_store = stMQTTConnectionGetTopics(connection);
+  app_ui->home_ui.selection_topic = gtk_single_selection_new(G_LIST_MODEL(app_ui->home_ui.topics_store));
+  gtk_list_view_set_model(GTK_LIST_VIEW(app_ui->home_ui.list_view_topic), GTK_SELECTION_MODEL(app_ui->home_ui.selection_topic));
+  position = gtk_single_selection_get_selected(app_ui->home_ui.selection_topic);
+  STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(app_ui->home_ui.topics_store), 1);
+  app_ui->home_ui.topic = topic;
+
+  g_signal_connect(app_ui->home_ui.selection_topic, "selection-changed", G_CALLBACK(selectionTopic), &app_ui->home_ui);
   
   gtk_stack_set_visible_child_name(GTK_STACK(app_ui->stack), "homepage");
   gtk_image_set_from_file(GTK_IMAGE(app_ui->top_box.button_switch.image), NAV_CONNECTION_PATH);
@@ -98,11 +113,32 @@ void selectionConnection(GtkSelectionModel *selection_model, int position, int n
 
   position = gtk_single_selection_get_selected(home_ui->selection_connection);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(home_ui->connection_store), position);
-
+  
+  home_ui->connection = connection;
   home_ui->topics_store = stMQTTConnectionGetTopics(connection);
   
   home_ui->selection_topic = gtk_single_selection_new(G_LIST_MODEL(home_ui->topics_store));
   gtk_list_view_set_model(GTK_LIST_VIEW(home_ui->list_view_topic), GTK_SELECTION_MODEL(home_ui->selection_topic));
+  
+  position = gtk_single_selection_get_selected(home_ui->selection_topic);
+  STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(home_ui->topics_store), position);
+  home_ui->topic = topic;
 
-  gtk_label_set_text(GTK_LABEL(home_ui->label_top), stMQTTConnectionGetName(connection));
+  g_signal_connect(home_ui->selection_topic, "selection-changed", G_CALLBACK(selectionTopic), home_ui);
+
+  gtk_label_set_text(GTK_LABEL(home_ui->label_top_name), stMQTTConnectionGetName(connection));
+
+  char *str = malloc(strlen(stMQTTConnectionGetHost(connection)) + strlen(stMQTTConnectionGetProtocol(connection)) + 4);
+  sprintf(str, "%s//:%s", stMQTTConnectionGetProtocol(connection), stMQTTConnectionGetHost(connection));
+  gtk_label_set_text(GTK_LABEL(home_ui->label_top_host), str);
+  free(str);
+}
+
+void selectionTopic(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data){
+  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
+
+  position = gtk_single_selection_get_selected(home_ui->selection_topic);
+  STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(home_ui->topics_store), position);
+
+  home_ui->topic = topic;
 }

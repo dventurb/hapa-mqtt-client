@@ -3,7 +3,11 @@
 
 #include <uuid/uuid.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 
 const char *getID(void);
+int countDigits(int num);
+const char *getDateTime(void);
 
 #endif

@@ -23,5 +23,6 @@ void initAppWidgets(ST_AppWidgets *app_ui, GtkApplication *app);
 void switchToForm(GtkButton *button, gpointer user_data);
 void switchToHome(GtkButton *button, gpointer user_data);
 void selectionConnection(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
+void selectionTopic(GtkSelectionModel *selection_model, int position, int n_items, gpointer user_data);
 
 #endif 

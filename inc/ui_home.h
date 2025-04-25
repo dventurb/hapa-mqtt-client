@@ -5,6 +5,7 @@
 #include "connection.h"
 #include "topic.h"
 #include "json_utils.h"
+#include "mqtt.h"
 
 typedef struct _ST_HomeUI{
   GtkWidget *main_box;
@@ -19,15 +20,18 @@ typedef struct _ST_HomeUI{
   GtkListItemFactory *factory_connection;
   GtkListItemFactory *factory_topic;
   GtkWidget *label;
-  GtkWidget *label_top;
+  GtkWidget *label_top_name;
+  GtkWidget *label_top_host;
   GListStore *connection_store;
   GListStore *topics_store;
-  GtkWidget *scrolled_payload;
-  GtkWidget *text_view;
+  GtkWidget *scrolled_message;
+  GtkWidget *message_box;
   GtkWidget *entry_payload;
   GtkWidget *image;
   GtkGesture *gesture_send;
   GtkGesture *gesture_start;
+  STMQTTConnection *connection;
+  STMQTTTopic *topic;
 }ST_HomeUI;
 
 void initHomeUI(ST_HomeUI *home_ui);

@@ -1,25 +1,16 @@
 {
   "ConnectionsSettings":{
-    "8e6c1351-b83f-41aa-8038-be216a533970":{
-      "name":"ESP32",
+    "a1c67976-04b0-4163-874a-6466f4f56052":{
+      "name":"nova conexão",
       "port":1883,
       "protocol":"mqtt",
-      "host":"",
+      "host":"test.mosquitto.org",
       "username":"",
       "password":"",
       "client_id":"",
       "certValidation":false,
       "encryption":false,
-      "subscriptions":[
-        {
-          "topic":"hapa\/rele",
-          "qos":"2"
-        },
-        {
-          "topic":"room\/tv",
-          "qos":"0"
-        }
-      ],
+      "subscriptions":[],
       "serverCertificate":{
         "data":""
       },
@@ -30,11 +21,11 @@
         "data":""
       }
     },
-    "5e4f5534-d9f2-402e-b574-b31b10d3032a":{
-      "name":"nova conexão",
+    "d4d1896c-0086-4336-bca1-d024bcd524ad":{
+      "name":"TEST",
       "port":1883,
       "protocol":"mqtt",
-      "host":"",
+      "host":"192.168.1.197",
       "username":"",
       "password":"",
       "client_id":"",
@@ -42,8 +33,8 @@
       "encryption":false,
       "subscriptions":[
         {
-          "topic":"room\/rrr",
-          "qos":"1"
+          "topic":"hapa\/rele",
+          "qos":"0"
         }
       ],
       "serverCertificate":{
