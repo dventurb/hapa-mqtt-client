@@ -10,7 +10,12 @@
       "client_id":"",
       "certValidation":false,
       "encryption":false,
-      "subscriptions":[],
+      "subscriptions":[
+        {
+          "topic":"#",
+          "qos":"0"
+        }
+      ],
       "serverCertificate":{
         "data":""
       },

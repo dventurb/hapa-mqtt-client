@@ -57,8 +57,8 @@ void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
   GtkWidget *box_out = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   GtkWidget *label = gtk_label_new(NULL);
 
-  char *header = malloc(strlen(topic) + 7);
-  sprintf(header, "Tópico: %s", topic);
+  char *header = malloc(strlen(topic) + strlen("Tópico: ") + 1);
+  snprintf(header, strlen(topic) + strlen("Tópico: ") + 1, "Tópico: %s", topic);
   gtk_label_set_text(GTK_LABEL(label), header);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
   gtk_widget_add_css_class(label, "message_topic_received");
@@ -66,6 +66,8 @@ void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
 
   label = gtk_label_new(payload);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_widget_set_hexpand(label, FALSE);
+  gtk_widget_set_vexpand(label, FALSE);
   gtk_widget_add_css_class(label, "message_payload_received");
   gtk_box_append(GTK_BOX(box_in), label);
 
@@ -83,5 +85,15 @@ void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
   gtk_widget_set_margin_end(box_out, 20);
   gtk_box_append(GTK_BOX(home_ui->message_box), box_out);
 
+  scrollToBottom(GTK_SCROLLED_WINDOW(home_ui->scrolled_message));
+
   free(header);
+  free(date);
+}
+
+void scrollToBottom(GtkScrolledWindow *scrolled){
+  GtkAdjustment *adjustment = gtk_scrolled_window_get_vadjustment(scrolled);
+  double max_value = gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_page_size(adjustment);
+
+  gtk_adjustment_set_value(adjustment, max_value);
 }

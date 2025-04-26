@@ -101,7 +101,7 @@ void switchToHome(GtkButton *button, gpointer user_data){
   gtk_image_set_from_file(GTK_IMAGE(app_ui->top_box.button_switch.image), NAV_CONNECTION_PATH);
   gtk_widget_set_size_request(app_ui->top_box.button_switch.image, 24, 24);
   gtk_widget_set_margin_end(app_ui->top_box.button_switch.button, 40);
-  gtk_label_set_text(GTK_LABEL(app_ui->top_box.button_switch.label), "CONNECTAR");
+  gtk_label_set_text(GTK_LABEL(app_ui->top_box.button_switch.label), "CONECTAR");
 
   g_signal_handlers_disconnect_by_func(app_ui->top_box.button_switch.button, switchToHome, app_ui);
 

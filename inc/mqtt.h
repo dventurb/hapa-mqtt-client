@@ -12,6 +12,6 @@ typedef struct _ST_HomeUI ST_HomeUI;
 struct mosquitto *connectMQTT(ST_HomeUI *home_ui, STMQTTConnection *connection, STMQTTTopic *topic);
 void receiveMQTT(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg);
 void publishMQTT(struct mosquitto *mosq, STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload);
-void disconnectMQTT(struct mosquitto *mosq);
+void disconnectMQTT(struct mosquitto **mosq);
 
 #endif

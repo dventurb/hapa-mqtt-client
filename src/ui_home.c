@@ -67,6 +67,17 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_box_append(GTK_BOX(box_right_top), home_ui->label_top_host);
   gtk_widget_set_margin_start(home_ui->label_top_host, 5);
 
+  home_ui->image_start = gtk_image_new_from_file(START_CONNECTION_PATH);
+  gtk_widget_set_size_request(home_ui->image_start, 35, 35);
+  gtk_widget_set_hexpand(home_ui->image_start, TRUE);
+  gtk_widget_set_halign(home_ui->image_start, GTK_ALIGN_END);
+  gtk_widget_set_margin_end(home_ui->image_start, 10);
+  gtk_widget_add_css_class(home_ui->image_start, "home_start_connection");
+  gtk_box_append(GTK_BOX(box_right_top), home_ui->image_start);
+  home_ui->gesture_start = gtk_gesture_click_new();
+  gtk_widget_add_controller(home_ui->image_start, GTK_EVENT_CONTROLLER(home_ui->gesture_start));
+  g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
+
   GtkWidget *box_right_bottom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_box_append(GTK_BOX(box_right), box_right_bottom);
   
@@ -109,12 +120,12 @@ void initHomeUI(ST_HomeUI *home_ui){
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(home_ui->entry_payload));
   gtk_text_buffer_set_text(buffer, "Hello", -1);
   gtk_widget_add_css_class(home_ui->entry_payload, "home_entry_payload");
-  home_ui->scrolled_message = gtk_scrolled_window_new();
-  gtk_widget_set_hexpand(home_ui->scrolled_message, TRUE);
-  gtk_widget_set_vexpand(home_ui->scrolled_message, TRUE);
-  gtk_widget_add_css_class(home_ui->scrolled_message, "home_scrolled_entry");
-  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), home_ui->entry_payload);
-  gtk_box_append(GTK_BOX(box_payload), home_ui->scrolled_message);
+  home_ui->scrolled_send = gtk_scrolled_window_new();
+  gtk_widget_set_hexpand(home_ui->scrolled_send, TRUE);
+  gtk_widget_set_vexpand(home_ui->scrolled_send, TRUE);
+  gtk_widget_add_css_class(home_ui->scrolled_send, "home_scrolled_entry");
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_send), home_ui->entry_payload);
+  gtk_box_append(GTK_BOX(box_payload), home_ui->scrolled_send);
 
   home_ui->image = gtk_image_new_from_file(SEND_PAYLOAD_PATH);
   gtk_widget_set_size_request(home_ui->image, 35, 35);
@@ -185,12 +196,57 @@ void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpoi
   gtk_text_buffer_get_end_iter(buffer, &end);
   
   char *payload = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-  struct mosquitto *mosq = connectMQTT(home_ui, home_ui->connection, home_ui->topic);
-  if(!mosq){
+  if(home_ui->mosq){
+    publishMQTT(home_ui->mosq, home_ui->topic, home_ui, payload);
+  }
+
+  free(payload);
+}
+
+void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
+  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
+  
+  home_ui->mosq = connectMQTT(home_ui, home_ui->connection, home_ui->topic);
+  if(!home_ui->mosq){
     return;
   }
-  publishMQTT(mosq, home_ui->topic, home_ui, payload);
+  gtk_image_set_from_file(GTK_IMAGE(home_ui->image_start), STOP_CONNECTION_PATH);
 
-  //disconnectMQTT(mosq);
-  free(payload);
+  g_signal_handlers_disconnect_by_func(home_ui->gesture_start, G_CALLBACK(startConnection), home_ui);
+
+  g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(stopConnection), home_ui);
+}
+
+void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
+  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
+
+  disconnectMQTT(&home_ui->mosq);
+  if(home_ui->mosq != NULL){
+    g_print("Entrou 1 \n");
+    return;
+  }
+  gtk_image_set_from_file(GTK_IMAGE(home_ui->image_start), START_CONNECTION_PATH);
+ 
+  g_signal_handlers_disconnect_by_func(home_ui->gesture_start, G_CALLBACK(stopConnection), home_ui);
+  
+ g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
+}
+
+gboolean updateMessageUI(gpointer user_data){
+  ST_MessageData *message_data = (ST_MessageData *)user_data;
+  if(!g_utf8_validate(message_data->payload, -1, NULL)){
+    return FALSE;
+  }
+
+  receiveMessage(message_data->home_ui, message_data->topic, message_data->payload);
+  
+  return G_SOURCE_REMOVE;
+}
+
+void destroyMessageData(gpointer user_data){
+  ST_MessageData *message_data = (ST_MessageData *)user_data;
+  
+  free(message_data->topic);
+  free(message_data->payload);
+  free(message_data);
 }

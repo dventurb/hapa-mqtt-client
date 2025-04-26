@@ -6,6 +6,7 @@
 #include "topic.h"
 #include "json_utils.h"
 #include "mqtt.h"
+#include <mosquitto.h>
 
 typedef struct _ST_HomeUI{
   GtkWidget *main_box;
@@ -25,16 +26,29 @@ typedef struct _ST_HomeUI{
   GListStore *connection_store;
   GListStore *topics_store;
   GtkWidget *scrolled_message;
+  GtkWidget *scrolled_send;
   GtkWidget *message_box;
   GtkWidget *entry_payload;
+  GtkWidget *image_start;
   GtkWidget *image;
   GtkGesture *gesture_send;
   GtkGesture *gesture_start;
   STMQTTConnection *connection;
   STMQTTTopic *topic;
+  struct mosquitto *mosq;
 }ST_HomeUI;
+
+typedef struct {
+  ST_HomeUI *home_ui;
+  char *topic;
+  char *payload;
+}ST_MessageData;
 
 void initHomeUI(ST_HomeUI *home_ui);
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
+void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
+void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
+gboolean updateMessageUI(gpointer user_data);
+void destroyMessageData(gpointer user_data);
 
 #endif

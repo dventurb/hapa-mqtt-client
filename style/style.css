@@ -133,6 +133,14 @@
   color: #787878;
 }
 
+.home_start_connection {
+  border: none;
+}
+
+.home_start_connection:hover {
+  transform: scale(1.1);
+}
+
 .home_listitem_topic {
   background-color: #ffffff;
   border-radius: 6px;
@@ -143,12 +151,12 @@
   border-left: 4px solid #3498db;
 }
 
-.home_listitem_topic:selected {
+/*.home_listitem_topic:selected {
   background-color: #e3f2fd;
   border-left: 4px solid #1e88e5;
   color: #000000;
   transition: all 0.2ms ease;
-}
+}*/
 
 .home_listitem_topic_label {
   font-family: 'Roboto Mono', monospace;
@@ -249,6 +257,7 @@
   color: #111;
   font-family: monospace;
   font-size: 16px;
+  padding: 5px;
 }
 
 .message_date {

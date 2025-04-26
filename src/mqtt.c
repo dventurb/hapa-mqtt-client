@@ -39,7 +39,13 @@ struct mosquitto *connectMQTT(ST_HomeUI *home_ui, STMQTTConnection *connection, 
 
 void receiveMQTT(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg){
   ST_HomeUI *home_ui = (ST_HomeUI *)userdata;
-  receiveMessage(home_ui, msg->topic, msg->payload);
+
+  ST_MessageData *message_data = malloc(sizeof(ST_MessageData));
+  message_data->home_ui = home_ui;
+  message_data->payload = strndup(msg->payload, msg->payloadlen);
+  message_data->topic = strdup(msg->topic);
+  
+  g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, (GSourceFunc)updateMessageUI, message_data, destroyMessageData);
 }
 
 void publishMQTT(struct mosquitto *mosq, STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload){
@@ -53,11 +59,12 @@ void publishMQTT(struct mosquitto *mosq, STMQTTTopic *topic, ST_HomeUI *home_ui,
   }
 }
 
-void disconnectMQTT(struct mosquitto *mosq){
-  if(mosq){
-    mosquitto_loop_stop(mosq, true);
-    mosquitto_disconnect(mosq);
-    mosquitto_destroy(mosq);
+void disconnectMQTT(struct mosquitto **mosq){
+  if(*mosq){
+    mosquitto_loop_stop(*mosq, true);
+    mosquitto_disconnect(*mosq);
+    mosquitto_destroy(*mosq);
+    *mosq = NULL;
   }
   mosquitto_lib_cleanup();
 }
