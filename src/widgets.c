@@ -15,13 +15,22 @@ void createButtonWithImageLabel(ST_BUTTON *button, const char *pathToImage, cons
   gtk_box_append(GTK_BOX(button->box), button->image);
 }
 
-void sendMessage(STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload){
+GtkWidget *buildMessageBox(STMessageData *message_data){
+  if(stMessageDataGetDirection(message_data) == ST_MESSAGE_SENT){
+    return sendMessage(stMessageDataGetTopic(message_data), stMessageDataGetPayload(message_data));
+  }else if(stMessageDataGetDirection(message_data) == ST_MESSAGE_RECEIVED){
+    return receiveMessage(stMessageDataGetTopic(message_data), stMessageDataGetPayload(message_data));
+  }
+  return receiveMessage(stMessageDataGetTopic(message_data), stMessageDataGetPayload(message_data));
+}
+
+GtkWidget *sendMessage(const char *topic, const char *payload){
   GtkWidget *box_in = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
   GtkWidget *box_out = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   GtkWidget *label = gtk_label_new(NULL);
 
-  char *header = malloc(strlen(stMQTTTopicGetName(topic)) + 7);
-  sprintf(header, "Tópico: %s", stMQTTTopicGetName(topic));
+  char *header = malloc(strlen(topic) + 7);
+  sprintf(header, "Tópico: %s", topic);
   gtk_label_set_text(GTK_LABEL(label), header);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
   gtk_widget_add_css_class(label, "message_topic_sent");
@@ -46,13 +55,14 @@ void sendMessage(STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload){
   gtk_widget_set_halign(box_out, GTK_ALIGN_END);
   gtk_widget_set_margin_start(box_out, 20);
   gtk_widget_set_margin_end(box_out, 20);
-
-  gtk_box_append(GTK_BOX(home_ui->message_box), box_out);
-
+ 
   free(header);
-}
+  free(date);
 
-void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
+  return box_out;
+ }
+
+GtkWidget *receiveMessage(const char *topic, const char *payload){
   GtkWidget *box_in = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
   GtkWidget *box_out = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   GtkWidget *label = gtk_label_new(NULL);
@@ -83,12 +93,11 @@ void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload){
   gtk_widget_set_halign(box_out, GTK_ALIGN_START);
   gtk_widget_set_margin_start(box_out, 20);
   gtk_widget_set_margin_end(box_out, 20);
-  gtk_box_append(GTK_BOX(home_ui->message_box), box_out);
-
-  scrollToBottom(GTK_SCROLLED_WINDOW(home_ui->scrolled_message));
 
   free(header);
   free(date);
+
+  return box_out;
 }
 
 void scrollToBottom(GtkScrolledWindow *scrolled){

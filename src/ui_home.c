@@ -4,6 +4,7 @@ static void setupFactoryConnection(GtkListItemFactory *factory, GtkListItem *ite
 static void bindFactoryConnection(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data); 
 static void setupFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
 static void bindFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
+static void bindFactoryMessage(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data);
    
 void initHomeUI(ST_HomeUI *home_ui){
   
@@ -101,14 +102,25 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_set_vexpand(home_ui->scrolled_topic, TRUE);
   gtk_box_append(GTK_BOX(home_ui->box_topics), home_ui->scrolled_topic);
 
+  home_ui->topic = g_list_model_get_item(G_LIST_MODEL(home_ui->topics_store), 0);
+
   GtkWidget *box_right_bottom_bottom = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   gtk_box_append(GTK_BOX(box_right_bottom), box_right_bottom_bottom);
+  
+
+  home_ui->message_store = g_list_store_new(ST_TYPE_MESSAGE_DATA);
+  GtkListItemFactory *factory = gtk_signal_list_item_factory_new();
+  g_signal_connect(factory, "bind", G_CALLBACK(bindFactoryMessage), home_ui);
 
   home_ui->message_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   gtk_widget_add_css_class(home_ui->message_box, "home_message_box");
 
+  GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(home_ui->message_store));
+
+  home_ui->message_list_view = gtk_list_view_new(GTK_SELECTION_MODEL(no_selection), factory);
+
   home_ui->scrolled_message = gtk_scrolled_window_new();
-  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), home_ui->message_box);
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), GTK_WIDGET(home_ui->message_list_view));
   gtk_widget_set_hexpand(home_ui->scrolled_message, TRUE);
   gtk_widget_set_size_request(home_ui->scrolled_message, -1, 380);
   gtk_widget_add_css_class(home_ui->scrolled_message, "home_scrolled_message");
@@ -188,6 +200,14 @@ static void bindFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpo
   gtk_label_set_text(GTK_LABEL(label), stMQTTTopicGetQoS(topic));
 }
 
+static void bindFactoryMessage(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
+  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
+  STMessageData *message_data = gtk_list_item_get_item(item);
+  GtkWidget *message_box = buildMessageBox(message_data);
+  gtk_list_item_set_child(item, message_box);
+
+}
+
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
   ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(home_ui->entry_payload));
@@ -232,21 +252,9 @@ void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, g
  g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
 }
 
-gboolean updateMessageUI(gpointer user_data){
-  ST_MessageData *message_data = (ST_MessageData *)user_data;
-  if(!g_utf8_validate(message_data->payload, -1, NULL)){
-    return FALSE;
-  }
+gboolean addMsgToListView(ST_HomeUI *home_ui){
+  g_list_store_append(home_ui->message_store, home_ui->message_data);
 
-  receiveMessage(message_data->home_ui, message_data->topic, message_data->payload);
-  
-  return G_SOURCE_REMOVE;
-}
-
-void destroyMessageData(gpointer user_data){
-  ST_MessageData *message_data = (ST_MessageData *)user_data;
-  
-  free(message_data->topic);
-  free(message_data->payload);
-  free(message_data);
+  scrollToBottom(GTK_SCROLLED_WINDOW(home_ui->scrolled_message));
+  return false;
 }

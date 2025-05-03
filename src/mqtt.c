@@ -33,19 +33,22 @@ struct mosquitto *connectMQTT(ST_HomeUI *home_ui, STMQTTConnection *connection, 
   }
   mosquitto_message_callback_set(mosq, receiveMQTT);
   mosquitto_loop_start(mosq);
-
+ 
   return mosq;
 }
 
 void receiveMQTT(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg){
   ST_HomeUI *home_ui = (ST_HomeUI *)userdata;
+  if(msg->payload == NULL){
+    return;
+  } 
+  STMessageData *message_data = stMessageDataNew(); 
+  stMessageDataSetPayload(message_data, msg->payload);
+  stMessageDataSetTopic(message_data, stMQTTTopicGetName(home_ui->topic));
+  stMessageDataSetDirection(message_data, ST_MESSAGE_RECEIVED);
+  home_ui->message_data = message_data;
 
-  ST_MessageData *message_data = malloc(sizeof(ST_MessageData));
-  message_data->home_ui = home_ui;
-  message_data->payload = strndup(msg->payload, msg->payloadlen);
-  message_data->topic = strdup(msg->topic);
-  
-  g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, (GSourceFunc)updateMessageUI, message_data, destroyMessageData);
+  g_idle_add((GSourceFunc)addMsgToListView, home_ui);
 }
 
 void publishMQTT(struct mosquitto *mosq, STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload){
@@ -55,7 +58,13 @@ void publishMQTT(struct mosquitto *mosq, STMQTTTopic *topic, ST_HomeUI *home_ui,
     // TODO: Create a function to send a warning "message fail"
     return;
   }else {
-    sendMessage(topic, home_ui, payload);
+    STMessageData *message_data = stMessageDataNew();
+    stMessageDataSetPayload(message_data, payload);
+    stMessageDataSetTopic(message_data, stMQTTTopicGetName(topic));
+    stMessageDataSetDirection(message_data, ST_MESSAGE_SENT);
+    home_ui->message_data = message_data;
+    
+    g_idle_add((GSourceFunc)addMsgToListView, home_ui);
   }
 }
 

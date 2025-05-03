@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include "topic.h"
 #include "aux.h"
+#include "message.h"
 
 typedef struct {
  GtkWidget *button;
@@ -13,10 +14,12 @@ typedef struct {
 }ST_BUTTON;
 
 typedef struct _ST_HomeUI ST_HomeUI;
+typedef struct _STMessageData STMessageData;
 
 void createButtonWithImageLabel(ST_BUTTON *button, const char *pathToImage, const char *textButton);
-void sendMessage(STMQTTTopic *topic, ST_HomeUI *home_ui, const char *payload);
-void receiveMessage(ST_HomeUI *home_ui, const char *topic, const char *payload);
+GtkWidget *buildMessageBox(STMessageData *message_data);
+GtkWidget *sendMessage(const char *topic, const char *payload);
+GtkWidget *receiveMessage(const char *topic, const char *payload);
 void scrollToBottom(GtkScrolledWindow *scrolled);
 
 #endif 

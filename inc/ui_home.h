@@ -36,19 +36,18 @@ typedef struct _ST_HomeUI{
   STMQTTConnection *connection;
   STMQTTTopic *topic;
   struct mosquitto *mosq;
+  GListStore *message_store;
+  GtkWidget *message_list_view;
+  STMessageData *message_data;
 }ST_HomeUI;
 
-typedef struct {
-  ST_HomeUI *home_ui;
-  char *topic;
-  char *payload;
-}ST_MessageData;
+
+typedef struct _STMessageData _STMessageData;
 
 void initHomeUI(ST_HomeUI *home_ui);
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
-gboolean updateMessageUI(gpointer user_data);
-void destroyMessageData(gpointer user_data);
+gboolean addMsgToListView(ST_HomeUI *home_ui);
 
 #endif
