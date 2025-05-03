@@ -13,7 +13,7 @@ void initTopBox(ST_TopBox *top_box){
   gtk_box_append(GTK_BOX(top_box->box), top_box->image);
 
   // TEXT
-  top_box->label = gtk_label_new("HAPA IoT");
+  top_box->label = gtk_label_new("HAPA MQTT Client");
   gtk_widget_add_css_class(top_box->label, "topbox_label");
   gtk_widget_set_margin_start(top_box->label, 10);
   gtk_box_append(GTK_BOX(top_box->box), top_box->label);

@@ -167,8 +167,7 @@ static void bindFactoryConnection(GtkListItemFactory *factory, GtkListItem *item
 
   GtkWidget *label_name = g_object_get_data(G_OBJECT(item), "name");
 
- gtk_label_set_text(GTK_LABEL(label_name), stMQTTConnectionGetName(connection));
-
+  gtk_label_set_text(GTK_LABEL(label_name), stMQTTConnectionGetName(connection));
 }
 
 static void setupFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
@@ -201,11 +200,9 @@ static void bindFactoryTopic(GtkListItemFactory *factory, GtkListItem *item, gpo
 }
 
 static void bindFactoryMessage(GtkListItemFactory *factory, GtkListItem *item, gpointer user_data){
-  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
   STMessageData *message_data = gtk_list_item_get_item(item);
   GtkWidget *message_box = buildMessageBox(message_data);
   gtk_list_item_set_child(item, message_box);
-
 }
 
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
