@@ -39,12 +39,12 @@ struct mosquitto *connectMQTT(ST_HomeUI *home_ui, STMQTTConnection *connection, 
 
 void receiveMQTT(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg){
   ST_HomeUI *home_ui = (ST_HomeUI *)userdata;
-  if(msg->payload == NULL){
+  if(msg->payload == NULL || !g_utf8_validate(msg->payload, -1, NULL)){
     return;
   } 
   STMessageData *message_data = stMessageDataNew(); 
   stMessageDataSetPayload(message_data, msg->payload);
-  stMessageDataSetTopic(message_data, stMQTTTopicGetName(home_ui->topic));
+  stMessageDataSetTopic(message_data, msg->topic);
   stMessageDataSetDirection(message_data, ST_MESSAGE_RECEIVED);
   home_ui->message_data = message_data;
 

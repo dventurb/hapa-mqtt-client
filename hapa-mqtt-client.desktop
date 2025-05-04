@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=HAPA IoT
-Icon=icons/apps/64/hapa-app-icon.png
-Exec=programa
-Terminal=false
+Name=HAPA MQTT Client
+Icon=/usr/share/icons/hapa-mqtt-client/apps/64/hapa-app-icon.png
+Exec=/usr/bin/hapa-mqtt-client
+Terminal=false 
 Categories=Development;
 
 

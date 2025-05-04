@@ -8,7 +8,7 @@ SRC = $(wildcard src/*.c)
 
 OBJ = $(SRC:.c=.o)
 
-BIN = programa
+BIN = hapa-mqtt-client
 
 all: $(BIN)
 

@@ -1,31 +1,31 @@
 #ifndef PATHS_H
 #define PATHS_H
 
-#define STYLE_CSS_PATH "style/style.css"
+#define STYLE_CSS_PATH "/usr/share/hapa-mqtt-client/style.css"
 
-#define SETTINGS_JSON_PATH "config/settings.json"
+#define SETTINGS_JSON_PATH "/etc/hapa-mqtt-client/settings.json"
 
-#define LOGOTIPO_PATH "icons/apps/48/hapa-app-icon.png"
+#define LOGOTIPO_PATH "/usr/share/icons/hapa-mqtt-client/apps/48/hapa-app-icon.png"
 
-#define NAV_CONNECTION_PATH "icons/navigation/nav-connection.png"
-#define NAV_BACK_PATH "icons/navigation/nav-back.png"
-#define NAV_MENU_PATH "icons/navigation/nav-menu.png"
+#define NAV_CONNECTION_PATH "/usr/share/icons/hapa-mqtt-client/navigation/nav-connection.png"
+#define NAV_BACK_PATH "/usr/share/icons/hapa-mqtt-client/navigation/nav-back.png"
+#define NAV_MENU_PATH "/usr/share/icons/hapa-mqtt-client/navigation/nav-menu.png"
 
-#define CONNECTION_ADD_PATH "icons/actions/connection-add.png"
-#define CONNECTION_ACTIVATE_PATH "icons/actions/connection-activate.png"
-#define CONNECTION_SAVE_PATH "icons/actions/connection-save.png"
-#define CONNECTION_DELETE_PATH "icons/actions/connection-delete.png"
-#define CONNECTION_OPTIONS_PATH "icons/actions/connection-options.png"
+#define CONNECTION_ADD_PATH "/usr/share/icons/hapa-mqtt-client/actions/connection-add.png"
+#define CONNECTION_ACTIVATE_PATH "/usr/share/icons/hapa-mqtt-client/actions/connection-activate.png"
+#define CONNECTION_SAVE_PATH "/usr/share/icons/hapa-mqtt-client/actions/connection-save.png"
+#define CONNECTION_DELETE_PATH "/usr/share/icons/hapa-mqtt-client/actions/connection-delete.png"
+#define CONNECTION_OPTIONS_PATH "/usr/share/icons/hapa-mqtt-client/actions/connection-options.png"
 
-#define TOPIC_ADD_PATH "icons/actions/topic-add.png"
-#define TOPIC_DELETE_PATH "icons/actions/topic-delete.png"
-#define TOPIC_BACK_PATH "icons/actions/topic-back.png"
-#define TOPIC_CERTIFICATES_PATH "icons/actions/topic-certificates.png"
+#define TOPIC_ADD_PATH "/usr/share/icons/hapa-mqtt-client/actions/topic-add.png"
+#define TOPIC_DELETE_PATH "/usr/share/icons/hapa-mqtt-client/actions/topic-delete.png"
+#define TOPIC_BACK_PATH "/usr/share/icons/hapa-mqtt-client/actions/topic-back.png"
+#define TOPIC_CERTIFICATES_PATH "/usr/share/icons/hapa-mqtt-client/actions/topic-certificates.png"
 
-#define SEND_PAYLOAD_PATH "icons/actions/send-payload.png"
+#define SEND_PAYLOAD_PATH "/usr/share/icons/hapa-mqtt-client/actions/send-payload.png"
 
-#define START_CONNECTION_PATH "icons/status/start.png"
-#define STOP_CONNECTION_PATH "icons/status/stop.png"
+#define START_CONNECTION_PATH "/usr/share/icons/hapa-mqtt-client/status/start.png"
+#define STOP_CONNECTION_PATH "/usr/share/icons/hapa-mqtt-client/status/stop.png"
 
 #endif 
 

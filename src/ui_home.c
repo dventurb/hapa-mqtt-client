@@ -116,7 +116,6 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_add_css_class(home_ui->message_box, "home_message_box");
 
   GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(home_ui->message_store));
-
   home_ui->message_list_view = gtk_list_view_new(GTK_SELECTION_MODEL(no_selection), factory);
 
   home_ui->scrolled_message = gtk_scrolled_window_new();
@@ -255,3 +254,4 @@ gboolean addMsgToListView(ST_HomeUI *home_ui){
   scrollToBottom(GTK_SCROLLED_WINDOW(home_ui->scrolled_message));
   return false;
 }
+

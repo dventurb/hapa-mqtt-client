@@ -25,32 +25,6 @@
       "clientKey":{
         "data":""
       }
-    },
-    "d4d1896c-0086-4336-bca1-d024bcd524ad":{
-      "name":"TEST",
-      "port":1883,
-      "protocol":"mqtt",
-      "host":"192.168.1.197",
-      "username":"",
-      "password":"",
-      "client_id":"",
-      "certValidation":false,
-      "encryption":false,
-      "subscriptions":[
-        {
-          "topic":"hapa\/rele",
-          "qos":"0"
-        }
-      ],
-      "serverCertificate":{
-        "data":""
-      },
-      "clientCertificate":{
-        "data":""
-      },
-      "clientKey":{
-        "data":""
-      }
     }
   }
 }

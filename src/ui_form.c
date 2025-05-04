@@ -96,9 +96,11 @@ void initFormUI(ST_FormUI *form_ui){
   int position = gtk_single_selection_get_selected(form_ui->connections_ui.selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connections_ui.connection_store), position);
   form_ui->topics_ui.connection = connection;
-  form_ui->topics_ui.topics_store = stMQTTConnectionGetTopics(connection);
+  if(connection){
+    form_ui->topics_ui.topics_store = stMQTTConnectionGetTopics(connection);
+  }
   form_ui->topics_ui.no_selection = gtk_no_selection_new(G_LIST_MODEL(form_ui->topics_ui.topics_store));
-  gtk_list_view_set_model(GTK_LIST_VIEW(form_ui->topics_ui.list_view), GTK_SELECTION_MODEL(form_ui->topics_ui.no_selection));
+    gtk_list_view_set_model(GTK_LIST_VIEW(form_ui->topics_ui.list_view), GTK_SELECTION_MODEL(form_ui->topics_ui.no_selection));
 
   /* ----------------------------- END TOPIC SECTION ----------------------------- */
 
@@ -112,6 +114,9 @@ void selectionChanged(GtkSelectionModel *selection_model, int position, int n_it
   position = gtk_single_selection_get_selected(form_ui->connections_ui.selection_model);
   STMQTTConnection *connection = g_list_model_get_item(G_LIST_MODEL(form_ui->connections_ui.connection_store), position);
   form_ui->topics_ui.connection = connection;
+  if(!connection){
+    return;
+  }
   form_ui->topics_ui.topics_store = stMQTTConnectionGetTopics(connection);
   form_ui->topics_ui.no_selection = gtk_no_selection_new(G_LIST_MODEL(form_ui->topics_ui.topics_store));
   gtk_list_view_set_model(GTK_LIST_VIEW(form_ui->topics_ui.list_view), GTK_SELECTION_MODEL(form_ui->topics_ui.no_selection));
