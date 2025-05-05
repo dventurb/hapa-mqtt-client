@@ -35,8 +35,8 @@
 
 
 ## About Project
-HAPA MQTT Client is a lightweight tool for mananing MQTT connections, topics, and payloads. This project was developed as part of internship at HAPA IoT, with aim of improving skills in MQTT protocol and GTK development using C. 
-The design and some features are inspired by some MQTT clients like  [MQTT Explorer] (https://github.com/thomasnordquist/MQTT-Explorer) and [MQTTX] (https://github.com/emqx/MQTTX).
+**HAPA MQTT Client** is a lightweight tool for mananing MQTT connections, topics, and payloads. This project was developed as part of internship at HAPA IoT, with aim of improving skills in MQTT protocol and GTK development using C. 
+The design and some features are inspired by some MQTT clients like  [MQTT Explorer](https://github.com/thomasnordquist/MQTT-Explorer) and [MQTTX](https://github.com/emqx/MQTTX).
 
 ## Installation 
 
@@ -58,14 +58,14 @@ All dependencies are automatically installed by the install script (instal.sh).
 - Modern UI with GTK 4 
 - Manage multiple MQTT connections 
 - Payload viewer in real-time 
-- Inspired by [MQTT Explorer] (https://github.com/thomasnordquist/MQTT-Explorer) and [MQTTX] (https://github.com/emqx/MQTTX) 
+- Inspired by [MQTT Explorer](https://github.com/thomasnordquist/MQTT-Explorer) and [MQTTX](https://github.com/emqx/MQTTX) 
 
 ## Project Layout 
-hapa-mqtt-client/
-├── src/            application source code 
-├── inc/            header files 
-├── config/         configuration files (e.g. settings.json)
-├── icons/          application icons 
-├── style/          css theme   
-└── TODO.md         future tasks and ideas
+    hapa-mqtt-client/
+    ├── src/            application source code 
+    ├── inc/            header files 
+    ├── config/         configuration files (e.g. settings.json)
+    ├── icons/          application icons 
+    ├── style/          css theme   
+    └── TODO.md         future tasks and ideas
 
