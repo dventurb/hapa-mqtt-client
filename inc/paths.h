@@ -1,9 +1,11 @@
 #ifndef PATHS_H
 #define PATHS_H
 
+#include "aux.h"
+
 #define STYLE_CSS_PATH "/usr/share/hapa-mqtt-client/style.css"
 
-#define SETTINGS_JSON_PATH "/etc/hapa-mqtt-client/settings.json"
+#define SETTINGS_JSON_PATH (getSettingsPath())
 
 #define LOGOTIPO_PATH "/usr/share/icons/hapa-mqtt-client/apps/48/hapa-app-icon.png"
 

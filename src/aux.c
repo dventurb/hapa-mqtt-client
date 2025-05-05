@@ -31,3 +31,13 @@ const char *getDateTime(void){
   sprintf(date, "%d-%d-%d %d:%d:%d", year, month, day, hour, min, sec);
   return date;
 }
+
+char *getSettingsPath(void){
+  static char *settings_path = NULL;
+  if (settings_path == NULL){ 
+    const char *dir = g_get_user_data_dir();
+    settings_path = g_build_filename(dir, "hapa-mqtt-client", "settings.json", NULL);
+  }
+  g_print("\n%s\n", settings_path);
+  return settings_path;
+}
