@@ -226,6 +226,10 @@
   border-left: 2px solid #F0F0F0; 
 }
 
+.home_nohover row:hover {
+  background-color: transparent;
+}
+
 .message_topic_sent {
   color: #FEFEFE;
   font-size: 12px;

@@ -117,6 +117,7 @@ void initHomeUI(ST_HomeUI *home_ui){
 
   GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(home_ui->message_store));
   home_ui->message_list_view = gtk_list_view_new(GTK_SELECTION_MODEL(no_selection), factory);
+  gtk_widget_add_css_class(home_ui->message_list_view, "home_nohover");
 
   home_ui->scrolled_message = gtk_scrolled_window_new();
   gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(home_ui->scrolled_message), GTK_WIDGET(home_ui->message_list_view));
