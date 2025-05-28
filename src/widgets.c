@@ -33,12 +33,14 @@ GtkWidget *sendMessage(const char *topic, const char *payload){
   sprintf(header, "Tópico: %s", topic);
   gtk_label_set_text(GTK_LABEL(label), header);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_topic_sent");
   gtk_box_append(GTK_BOX(box_in), label);
 
   label = gtk_label_new(payload);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
   gtk_label_set_wrap(GTK_LABEL(label), true);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_payload_sent");
   gtk_box_append(GTK_BOX(box_in), label);
 
@@ -49,6 +51,7 @@ GtkWidget *sendMessage(const char *topic, const char *payload){
   char *date = strdup(getDateTime());
   label = gtk_label_new(date);
   gtk_label_set_xalign(GTK_LABEL(label), 1.0);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_date");
   gtk_box_append(GTK_BOX(box_out), label);
   
@@ -71,6 +74,7 @@ GtkWidget *receiveMessage(const char *topic, const char *payload){
   snprintf(header, strlen(topic) + strlen("Tópico: ") + 1, "Tópico: %s", topic);
   gtk_label_set_text(GTK_LABEL(label), header);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_topic_received");
   gtk_box_append(GTK_BOX(box_in), label);
 
@@ -78,6 +82,7 @@ GtkWidget *receiveMessage(const char *topic, const char *payload){
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
   gtk_widget_set_hexpand(label, FALSE);
   gtk_widget_set_vexpand(label, FALSE);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_payload_received");
   gtk_box_append(GTK_BOX(box_in), label);
 
@@ -87,6 +92,7 @@ GtkWidget *receiveMessage(const char *topic, const char *payload){
   char *date = strdup(getDateTime());
   label = gtk_label_new(date);
   gtk_label_set_xalign(GTK_LABEL(label), 1.0);
+  gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_date");
   gtk_box_append(GTK_BOX(box_out), label);
 

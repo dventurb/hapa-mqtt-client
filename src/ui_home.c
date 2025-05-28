@@ -245,7 +245,7 @@ void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, g
  
   g_signal_handlers_disconnect_by_func(home_ui->gesture_start, G_CALLBACK(stopConnection), home_ui);
   
- g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
+  g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
 }
 
 gboolean addMsgToListView(ST_HomeUI *home_ui){
