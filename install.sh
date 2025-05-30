@@ -45,7 +45,6 @@ fi
 
 mkdir -p ~/.local/share/hapa-mqtt-client/ 
 sudo mkdir -p /usr/share/icons/hapa-mqtt-client
-sudo mkdir -p ~/usr/share/hapa-mqtt-client
 sudo cp style/style.css /usr/share/hapa-mqtt-client/
 
 make -j$(nproc) && sudo make install
