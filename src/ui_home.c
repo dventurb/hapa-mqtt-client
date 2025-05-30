@@ -67,14 +67,27 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_add_css_class(home_ui->label_top_host, "home_box_right_top_host");
   gtk_box_append(GTK_BOX(box_right_top), home_ui->label_top_host);
   gtk_widget_set_margin_start(home_ui->label_top_host, 5);
+  
+  GtkWidget *expansion = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_hexpand(expansion, TRUE);
+  gtk_box_append(GTK_BOX(box_right_top), expansion);
+
+  home_ui->image = gtk_image_new_from_file(MESSAGE_CLEAN_PATH);
+  gtk_widget_set_size_request(home_ui->image, 25, 25);
+  gtk_widget_set_margin_end(home_ui->image, 0);
+  gtk_widget_add_css_class(home_ui->image, "home_clean_message");
+  gtk_box_append(GTK_BOX(box_right_top), home_ui->image);
+
+  GtkGesture *gesture_clean = gtk_gesture_click_new();
+  gtk_widget_add_controller(home_ui->image, GTK_EVENT_CONTROLLER(gesture_clean));
+  g_signal_connect(gesture_clean, "pressed", G_CALLBACK(cleanMessage), home_ui);
 
   home_ui->image_start = gtk_image_new_from_file(START_CONNECTION_PATH);
   gtk_widget_set_size_request(home_ui->image_start, 35, 35);
-  gtk_widget_set_hexpand(home_ui->image_start, TRUE);
-  gtk_widget_set_halign(home_ui->image_start, GTK_ALIGN_END);
   gtk_widget_set_margin_end(home_ui->image_start, 10);
   gtk_widget_add_css_class(home_ui->image_start, "home_start_connection");
   gtk_box_append(GTK_BOX(box_right_top), home_ui->image_start);
+
   home_ui->gesture_start = gtk_gesture_click_new();
   gtk_widget_add_controller(home_ui->image_start, GTK_EVENT_CONTROLLER(home_ui->gesture_start));
   g_signal_connect(home_ui->gesture_start, "pressed", G_CALLBACK(startConnection), home_ui);
@@ -218,6 +231,11 @@ void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpoi
   }
 
   free(payload);
+}
+
+void cleanMessage(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){
+  ST_HomeUI *home_ui = (ST_HomeUI *)user_data;
+  g_list_store_remove_all(home_ui->message_store);
 }
 
 void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data){

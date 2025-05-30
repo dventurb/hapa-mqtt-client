@@ -46,6 +46,7 @@ typedef struct _STMessageData _STMessageData;
 
 void initHomeUI(ST_HomeUI *home_ui);
 void sendPayload(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
+void cleanMessage(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, gpointer user_data);
 gboolean addMsgToListView(ST_HomeUI *home_ui);

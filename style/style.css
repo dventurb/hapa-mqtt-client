@@ -133,6 +133,14 @@
   color: #787878;
 }
 
+.home_clean_message {
+  border: none;
+}
+
+.home_clean_message:hover {
+  transform: scale(1.1);
+}
+
 .home_start_connection {
   border: none;
 }

@@ -29,5 +29,7 @@
 #define START_CONNECTION_PATH "/usr/share/icons/hapa-mqtt-client/status/start.png"
 #define STOP_CONNECTION_PATH "/usr/share/icons/hapa-mqtt-client/status/stop.png"
 
+#define MESSAGE_CLEAN_PATH "/usr/share/icons/hapa-mqtt-client/actions/message-clean.png"
+
 #endif 
 
