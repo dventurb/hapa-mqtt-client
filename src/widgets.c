@@ -39,7 +39,10 @@ GtkWidget *sendMessage(const char *topic, const char *payload){
 
   label = gtk_label_new(payload);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
-  gtk_label_set_wrap(GTK_LABEL(label), true);
+  gtk_label_set_wrap(GTK_LABEL(label), true);   // \n
+  gtk_label_set_wrap_mode(GTK_LABEL(label), PANGO_WRAP_CHAR);
+  gtk_label_set_max_width_chars(GTK_LABEL(label), 50);
+  gtk_widget_set_hexpand(label, false);
   gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_payload_sent");
   gtk_box_append(GTK_BOX(box_in), label);
@@ -58,6 +61,7 @@ GtkWidget *sendMessage(const char *topic, const char *payload){
   gtk_widget_set_halign(box_out, GTK_ALIGN_END);
   gtk_widget_set_margin_start(box_out, 20);
   gtk_widget_set_margin_end(box_out, 20);
+  gtk_widget_set_valign(box_out, GTK_ALIGN_END);
  
   free(header);
   free(date);
@@ -80,8 +84,11 @@ GtkWidget *receiveMessage(const char *topic, const char *payload){
 
   label = gtk_label_new(payload);
   gtk_label_set_xalign(GTK_LABEL(label), 0.0);
-  gtk_widget_set_hexpand(label, FALSE);
-  gtk_widget_set_vexpand(label, FALSE);
+  gtk_label_set_wrap(GTK_LABEL(label), true);   // \n
+  gtk_label_set_wrap_mode(GTK_LABEL(label), PANGO_WRAP_CHAR);
+  gtk_label_set_max_width_chars(GTK_LABEL(label), 50);
+  gtk_widget_set_hexpand(label, false);
+  gtk_widget_set_vexpand(label, true);
   gtk_label_set_selectable(GTK_LABEL(label), true);
   gtk_widget_add_css_class(label, "message_payload_received");
   gtk_box_append(GTK_BOX(box_in), label);
@@ -99,6 +106,7 @@ GtkWidget *receiveMessage(const char *topic, const char *payload){
   gtk_widget_set_halign(box_out, GTK_ALIGN_START);
   gtk_widget_set_margin_start(box_out, 20);
   gtk_widget_set_margin_end(box_out, 20);
+  gtk_widget_set_valign(box_out, GTK_ALIGN_START);
 
   free(header);
   free(date);

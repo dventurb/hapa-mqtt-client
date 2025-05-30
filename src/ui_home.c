@@ -15,7 +15,7 @@ void initHomeUI(ST_HomeUI *home_ui){
   
   // BOX CONNECTIONS 
   home_ui->box_connections = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-  gtk_widget_set_size_request(home_ui->box_connections, 250, 500);
+  gtk_widget_set_size_request(home_ui->box_connections, 200, 500);
   gtk_widget_set_margin_start(home_ui->box_connections, 10);
   gtk_box_append(GTK_BOX(home_ui->main_box), home_ui->box_connections);
   gtk_widget_add_css_class(home_ui->box_connections, "home_box_connections");
