@@ -35,10 +35,11 @@ typedef struct _ST_HomeUI{
   GtkGesture *gesture_start;
   STMQTTConnection *connection;
   STMQTTTopic *topic;
+  STMessageData *message_data;
   struct mosquitto *mosq;
   GListStore *message_store;
   GtkWidget *message_list_view;
-  STMessageData *message_data;
+  bool is_connected;
 }ST_HomeUI;
 
 

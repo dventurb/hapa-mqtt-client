@@ -87,6 +87,7 @@ void initHomeUI(ST_HomeUI *home_ui){
   gtk_widget_set_margin_end(home_ui->image_start, 10);
   gtk_widget_add_css_class(home_ui->image_start, "home_start_connection");
   gtk_box_append(GTK_BOX(box_right_top), home_ui->image_start);
+  home_ui->is_connected = false;
 
   home_ui->gesture_start = gtk_gesture_click_new();
   gtk_widget_add_controller(home_ui->image_start, GTK_EVENT_CONTROLLER(home_ui->gesture_start));
@@ -245,6 +246,9 @@ void startConnection(GtkGestureClick *gesture, int n_press, double x, double y, 
   if(!home_ui->mosq){
     return;
   }
+
+  home_ui->is_connected = true;
+
   gtk_image_set_from_file(GTK_IMAGE(home_ui->image_start), STOP_CONNECTION_PATH);
 
   g_signal_handlers_disconnect_by_func(home_ui->gesture_start, G_CALLBACK(startConnection), home_ui);
@@ -257,9 +261,11 @@ void stopConnection(GtkGestureClick *gesture, int n_press, double x, double y, g
 
   disconnectMQTT(&home_ui->mosq);
   if(home_ui->mosq != NULL){
-    g_print("Entrou 1 \n");
     return;
   }
+
+  home_ui->is_connected = false;
+
   gtk_image_set_from_file(GTK_IMAGE(home_ui->image_start), START_CONNECTION_PATH);
  
   g_signal_handlers_disconnect_by_func(home_ui->gesture_start, G_CALLBACK(stopConnection), home_ui);

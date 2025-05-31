@@ -4,6 +4,7 @@ struct _STMQTTTopic {
   GObject parent_instance;
   char *name;
   char *qos;
+  GListStore *message; 
 };
 
 G_DEFINE_TYPE(STMQTTTopic, st_mqtt_topic, G_TYPE_OBJECT);
@@ -11,6 +12,7 @@ G_DEFINE_TYPE(STMQTTTopic, st_mqtt_topic, G_TYPE_OBJECT);
 static void st_mqtt_topic_init(STMQTTTopic *topic){
   topic->name = NULL;
   topic->qos = NULL;
+  topic->message = g_list_store_new(ST_TYPE_MESSAGE_DATA);
 }
 
 static void st_mqtt_topic_finalize(GObject *object){
@@ -19,6 +21,8 @@ static void st_mqtt_topic_finalize(GObject *object){
   topic->name = NULL;
   free(topic->qos);
   topic->qos = NULL;
+  free(topic->message);
+  topic->message = NULL;
   G_OBJECT_CLASS(st_mqtt_topic_parent_class)->finalize(object);
 }
 
@@ -51,6 +55,10 @@ const char *st_mqtt_topic_get_qos(STMQTTTopic *self){
   }
 }
 
+GListStore *st_mqtt_topic_get_message(STMQTTTopic *self){
+  return self->message;
+}
+
 void st_mqtt_topic_set_name(STMQTTTopic *self, const char *name){
   if(self->name){
     free(self->name);
@@ -65,3 +73,7 @@ void st_mqtt_topic_set_qos(STMQTTTopic *self, const char *qos){
   self->qos = strdup(qos);
 }
 
+void st_mqtt_topic_set_message(STMQTTTopic *self, GListStore *message){
+  free(self->message);
+  self->message = message;
+}

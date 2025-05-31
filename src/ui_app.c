@@ -96,6 +96,10 @@ void switchToHome(GtkButton *button, gpointer user_data){
   app_ui->home_ui.topic = topic;
 
   g_signal_connect(app_ui->home_ui.selection_topic, "selection-changed", G_CALLBACK(selectionTopic), &app_ui->home_ui);
+
+  app_ui->home_ui.message_store = stMQTTTopicGetMessage(topic);
+  GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(app_ui->home_ui.message_store));
+  gtk_list_view_set_model(GTK_LIST_VIEW(app_ui->home_ui.message_list_view), GTK_SELECTION_MODEL(no_selection));
   
   gtk_stack_set_visible_child_name(GTK_STACK(app_ui->stack), "homepage");
   gtk_image_set_from_file(GTK_IMAGE(app_ui->top_box.button_switch.image), NAV_CONNECTION_PATH);
@@ -122,7 +126,17 @@ void selectionConnection(GtkSelectionModel *selection_model, int position, int n
   
   position = gtk_single_selection_get_selected(home_ui->selection_topic);
   STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(home_ui->topics_store), position);
+  
+  if(home_ui->is_connected && home_ui->topic){
+    mosquitto_unsubscribe(home_ui->mosq, NULL, stMQTTTopicGetName(home_ui->topic));
+    mosquitto_subscribe(home_ui->mosq, NULL, stMQTTTopicGetName(topic), atoi(stMQTTTopicGetQoS(topic)));
+  }
+
   home_ui->topic = topic;
+
+  home_ui->message_store = stMQTTTopicGetMessage(topic);
+  GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(home_ui->message_store));
+  gtk_list_view_set_model(GTK_LIST_VIEW(home_ui->message_list_view), GTK_SELECTION_MODEL(no_selection));
 
   g_signal_connect(home_ui->selection_topic, "selection-changed", G_CALLBACK(selectionTopic), home_ui);
 
@@ -139,6 +153,15 @@ void selectionTopic(GtkSelectionModel *selection_model, int position, int n_item
 
   position = gtk_single_selection_get_selected(home_ui->selection_topic);
   STMQTTTopic *topic = g_list_model_get_item(G_LIST_MODEL(home_ui->topics_store), position);
+  
+  if(home_ui->is_connected && home_ui->topic){
+    mosquitto_unsubscribe(home_ui->mosq, NULL, stMQTTTopicGetName(home_ui->topic));
+    mosquitto_subscribe(home_ui->mosq, NULL, stMQTTTopicGetName(topic), atoi(stMQTTTopicGetQoS(topic)));
+  } 
+
+  home_ui->message_store = stMQTTTopicGetMessage(topic);
+  GtkNoSelection *no_selection = gtk_no_selection_new(G_LIST_MODEL(home_ui->message_store));
+  gtk_list_view_set_model(GTK_LIST_VIEW(home_ui->message_list_view), GTK_SELECTION_MODEL(no_selection));
 
   home_ui->topic = topic;
 }
